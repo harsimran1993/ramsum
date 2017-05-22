@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="src" path="/ramsum-core"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/harsimran singh/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-backend-android/1.5.4/7b974b501dc92361698a1f6251f9e7b308582c08/gdx-backend-android-1.5.4.jar" sourcepath="C:/Users/harsimran singh/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-backend-android/1.5.4/494ea86b57d0fbcd1c89408b1db12eb27bba9f4f/gdx-backend-android-1.5.4-sources.jar"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="src" path="assets"/>
+	<classpathentry exported="true" kind="lib" path="/ramsum-core/libs/gdx-1.5.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="/ramsum-core/libs/gdx-box2d-1.5.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="/ramsum-core/libs/tween-engine-api.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

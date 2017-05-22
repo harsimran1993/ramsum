@@ -1,0 +1,132 @@
+
+lab.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+chair
+  rotate: false
+  xy: 735, 476
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+circuits
+  rotate: false
+  xy: 2, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+circuits2
+  rotate: false
+  xy: 951, 678
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+comp
+  rotate: false
+  xy: 68, 132
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+comp2
+  rotate: false
+  xy: 885, 574
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+door
+  rotate: false
+  xy: 885, 640
+  size: 64, 102
+  orig: 64, 102
+  offset: 0, 0
+  index: -1
+elevator
+  rotate: false
+  xy: 885, 744
+  size: 128, 143
+  orig: 128, 143
+  offset: 0, 0
+  index: -1
+ladder
+  rotate: false
+  xy: 735, 542
+  size: 148, 345
+  orig: 148, 345
+  offset: 0, 0
+  index: -1
+panel
+  rotate: false
+  xy: 2, 328
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+panel2
+  rotate: false
+  xy: 260, 350
+  size: 128, 106
+  orig: 128, 106
+  offset: 0, 0
+  index: -1
+pipe
+  rotate: false
+  xy: 2, 68
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+shelf
+  rotate: false
+  xy: 260, 246
+  size: 64, 102
+  orig: 64, 102
+  offset: 0, 0
+  index: -1
+shelf2
+  rotate: false
+  xy: 390, 354
+  size: 64, 102
+  orig: 64, 102
+  offset: 0, 0
+  index: -1
+table
+  rotate: false
+  xy: 2, 198
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+tankA
+  rotate: false
+  xy: 326, 284
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+tankbrokenA
+  rotate: false
+  xy: 456, 392
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+upwall
+  rotate: false
+  xy: 2, 458
+  size: 731, 146
+  orig: 731, 146
+  offset: 0, 0
+  index: -1
+walln
+  rotate: false
+  xy: 2, 606
+  size: 731, 281
+  orig: 731, 281
+  offset: 0, 0
+  index: -1

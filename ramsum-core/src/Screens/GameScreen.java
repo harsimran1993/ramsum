@@ -17,17 +17,15 @@ public class GameScreen implements Screen{
 	private float runTime = 0;
 	private InputHandler iph;
 	private RamSumGame game;
-	private String username;
 
-	public GameScreen(RamSumGame ramSumGame,Boolean multiplayer, String username, int level,Boolean newgame) {
-		Gdx.graphics.getWidth();
-        Gdx.graphics.getHeight();
+	public GameScreen(RamSumGame ramSumGame,Boolean multiplayer, int level,Boolean newgame) {
+		//Gdx.graphics.getWidth();
+        //Gdx.graphics.getHeight();
         float gameWidth = 768;
         float gameHeight = 480;
         int midPointY = (int) (gameHeight / 2);
         this.game=ramSumGame;
-        this.username=username;
-		world = new GameWorld(ramSumGame,(int)gameWidth,(int)gameHeight,multiplayer,username,level,newgame); // initialize world
+		world = new GameWorld(ramSumGame,(int)gameWidth,(int)gameHeight,multiplayer,level,newgame); // initialize world
 		renderer = new GameRenderer(world,(int)gameHeight,(int)gameWidth,midPointY); // initialize renderer
 		iph=new InputHandler(world,renderer,gameWidth,gameHeight);
 		Gdx.input.setInputProcessor(iph);
@@ -58,7 +56,7 @@ public class GameScreen implements Screen{
         	if(world.levelupdate)
         	{
         		System.out.println("updating");
-        		game.setScreen(new LoadScreen(world.nxtlevel,game,username));
+        		game.setScreen(new LoadScreen(world.nxtlevel,game));
         	}
         	else
         		game.setScreen(new InputScreen(game));

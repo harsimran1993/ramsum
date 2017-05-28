@@ -81,10 +81,10 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		dialogs=new Dialog_data[NOD];
 		objd= new object_data[NOO];
 		
-		dialogs[0]=new Dialog_data("foot-bot A", "Intruder Alert!!! unknown Bionic detected!!!");
-		dialogs[1]=new Dialog_data("foot-bot B", "Informing Sergeant!!!");
-		dialogs[2]=new Dialog_data("foot-bot A", "Receiving Orders!!!");
-		dialogs[3]=new Dialog_data("foot-bot B", "Engage and Destroy!!! hostile Bionic!!!");
+		dialogs[0]=new Dialog_data("Foot-Bot A", "Intruder Alert!!! Unknown Bionic Detected!!!");
+		dialogs[1]=new Dialog_data("Foot-Bot B", "Informing Sergeant!!!");
+		dialogs[2]=new Dialog_data("Foot-Bot A", "Receiving Orders!!!");
+		dialogs[3]=new Dialog_data("Foot-Bot B", "Engage and Destroy!!! Hostile Bionic!!!");
 
 		plats[0]=new Platform_data(1420, 280, 180, 60,0,true,60);
 		plats[1]=new Platform_data(3200, 280, 180, 60,0,true,40);
@@ -124,14 +124,15 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		dialogs=new Dialog_data[NOD];
 		objd= new object_data[NOO];
 		
-		dialogs[0]=new Dialog_data("sweeper-bot", "Intruder in Base!!!");
+		dialogs[0]=new Dialog_data("Sweeper-Bot", "Intruder Sighted!!!");
 		dialogs[1]=new Dialog_data("Sergeant Cluster", "WHO DARES DISTURB ME!!! DESTROY HIM!!!");
+		dialogs[1]=new Dialog_data("Sergeant Cluster", "FEEL MY WRATH AND DIE PEST!!!");
 		
-		plats[0]=new Platform_data(150, g-250, 220, 60,0,true,50);
-		plats[1]=new Platform_data(1500, g-220, 180, 60,0,true);
-		plats[2]=new Platform_data(2550, g-280, 220, 60,0,true,60);
-		plats[3]=new Platform_data(4200, g-320, 220, 60,0,true,90);
-		plats[4]=new Platform_data(3800, g-240, 220, 60,0,true);
+		plats[0]=new Platform_data(150, g-220, 220, 60,0,true,50);
+		plats[1]=new Platform_data(1500, g-160, 180, 60,0,true);
+		plats[2]=new Platform_data(2550, g-180, 220, 60,0,true,60);
+		plats[3]=new Platform_data(3800, g-200, 220, 60,0,true,90);
+		plats[4]=new Platform_data(4730, g-240, 220, 60,0,true,50);
 		plats[5]=new Platform_data(5790, 330, 320, 150,1,false);
 		//plats[6]=new Platform_data(6000, 335, 200, 60,2,false);
 		

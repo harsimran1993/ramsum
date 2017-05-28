@@ -6,21 +6,18 @@ import com.mygdx.ramsumgame.RamSumGame;
 public class LoadScreen implements Screen{
 
 	private RamSumGame game;
-	String username;
 	private int level;
 	
-	public LoadScreen(int level,RamSumGame game,String username)
+	public LoadScreen(int level,RamSumGame game)
 	{
 		this.level=level;
 		this.game=game;
-		this.username=username;
 	}
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
 		System.out.println("disposed");
 		this.game=null;
-		this.username=null;
 	}
 
 	@Override
@@ -39,7 +36,7 @@ public class LoadScreen implements Screen{
 	public void render(float arg0) {
 		// TODO Auto-generated method stub
 		game.isstart=true;
-		game.setScreen(new GameScreen(game,false,username,level,false));
+		game.setScreen(new GameScreen(game,false,level,false));
 	}
 
 	@Override

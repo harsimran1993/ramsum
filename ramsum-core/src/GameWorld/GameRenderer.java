@@ -36,6 +36,7 @@ public class GameRenderer {
 	private OrthographicCamera cam;
 	private ScrollHandler scroller;
 	private int gameHeight, gameWidth, lastLevel;
+	private float halfWidth,halfHeight;
 	private Background bg1,bg2;
 	private Grass frontGrass, backGrass, backGrass2,waterf,waterb,waterb2;
 	private Player p1;
@@ -65,6 +66,8 @@ public class GameRenderer {
         batcherclr = batcher.getColor();
         this.gameHeight = gameHeight;
         this.gameWidth=gameWidth;
+        this.halfWidth = gameWidth * 0.5f;
+        this.halfHeight = gameHeight * 0.5f;
         new Random();
         en= Myworld.en;
     	scroller = Myworld.getScroller();
@@ -146,8 +149,8 @@ public class GameRenderer {
         waterf=scroller.getwaterf();
         waterb=scroller.getwaterb();
         waterb2=scroller.getwaterb2();
-        hp=new Bar(p1.getHP(), 5, 5, gameWidth/3-50, 5);
-        mp=new Bar(p1.getMP(), 5, 15, gameWidth/3-70, 5);
+        hp=new Bar(p1.getHP(), (int) halfWidth -121+90, 17, -90, 12);
+        mp=new Bar(p1.getMP(), (int) halfWidth + 31, 17, 90, 12);
         xp=Myworld.xpBar;
         lastLevel = p1.level;
 	}
@@ -163,9 +166,9 @@ public class GameRenderer {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if(lastLevel != p1.level){
-			hp = new Bar(p1.getHP(), 5, 5, gameWidth/3-50, 5);
-	        mp=new Bar(p1.getMP(), 5, 15, gameWidth/3-70, 5);
-			xp=Myworld.xpBar;
+	        hp=new Bar(p1.getHP(), (int) halfWidth -121+90, 17, -90, 12);
+	        mp=new Bar(p1.getMP(), (int) halfWidth + 31, 17, 90, 12);
+	        xp=Myworld.xpBar;
 			lastLevel=p1.level;
 			//System.out.println("changed render xpbar");
 		}
@@ -224,7 +227,9 @@ public class GameRenderer {
 			//renderdamage point above enemy while hurt else put enemy out of hurt stage
 			if(enemy.ishurt() && enemy.hurttime<enemy.hurtmax)
 			{
-				Assetloader.font.draw(batcher, ""+enemy.hurtdamage, enemy.getX(), enemy.getY()-30-enemy.hurttime*30);
+				Assetloader.font.setColor(Color.RED);
+				Assetloader.font.setScale(1.2f,-1.2f);
+				Assetloader.font.draw(batcher, ""+enemy.hurtdamage, enemy.getX()- (enemy.isleft?enemy.width:0), enemy.getY()-50-enemy.hurttime*60);
 				enemy.hurttime+=delta;
 			}
 			else if(enemy.ishurt())
@@ -236,10 +241,14 @@ public class GameRenderer {
 				if(enemy.isAlive)
 				{
 					batcher.draw(enemy.currentframe(runTime),enemy.getX(), enemy.getY(), enemy.getwidth(), enemy.height);
+
+					Assetloader.font.setColor(Color.WHITE);
+					Assetloader.font.setScale(0.6f,-0.6f);
 					Assetloader.font.draw(batcher, ""+enemy.hp, enemy.getX() - (enemy.isleft?enemy.width:0), enemy.getY()-20);
 					if(enemy.isboss && enemy.dialogtime>0){
 						Assetloader.font.setColor(Color.YELLOW);
-						Assetloader.font.draw(batcher, enemy.dialog, enemy.getX()-(enemy.isleft?enemy.width:0), enemy.getY()-40);
+						Assetloader.font.setScale(0.75f,-0.75f);
+						Assetloader.font.draw(batcher, enemy.dialog, enemy.getX()-(enemy.isleft?enemy.width:0), enemy.getY()-50);
 						Assetloader.font.setColor(Color.WHITE);
 					}
 				}
@@ -255,9 +264,9 @@ public class GameRenderer {
 			if(p1.hurttime<p1.maxhurttime)
 			{
 				Assetloader.font.setColor(Color.RED);
-				Assetloader.font.setScale(1.2f,1.2f);
+				Assetloader.font.setScale(1.2f,-1.2f);
 				if(p1.hurtDamage!=0)
-						Assetloader.font.draw(batcher, ""+p1.hurtDamage, p1.getX()+(p1.isleft?-50:30), p1.getY()-30-p1.hurttime*30);
+						Assetloader.font.draw(batcher, ""+p1.hurtDamage, p1.getX()+(p1.isleft?-50:30), p1.getY()-50-p1.hurttime*60);
 				p1.hurttime+=delta;
 				Assetloader.font.setColor(Color.WHITE);
 			}
@@ -285,12 +294,12 @@ public class GameRenderer {
 			if(p1.isAlive)
 			{
 				String msg="victory";
-				Assetloader.font.draw(batcher,msg, gameWidth/2-(str.length()*3)/2, gameHeight/2-2);
+				Assetloader.font.draw(batcher,msg, halfWidth-(str.length()*3)/2, halfHeight-2);
 			}
 			else
 			{
 				String msg="loss";
-				Assetloader.font.draw(batcher,msg, gameWidth/2-(msg.length()*3)/2, gameHeight/2-2);
+				Assetloader.font.draw(batcher,msg, halfWidth-(msg.length()*3)/2, halfHeight-2);
 			}
 		}
 		if(Myworld.level.grass==2)
@@ -313,151 +322,184 @@ public class GameRenderer {
 		batcher.end();
 		rayHandler.updateAndRender();
 		/*shaper.begin(ShapeType.Filled);
+		shaper.setAutoShapeType(true);
 		shaper.setColor(Color.BLACK);
 		shaper.rect(Myworld.start.x,Myworld.start.y,Myworld.start.width,Myworld.start.height);
 		shaper.rect(Myworld.end.x,Myworld.end.y,Myworld.end.width,Myworld.end.height);
 		shaper.end();*/
-		batcher.begin();
 		
 		if(Myworld.isCUTSCENE()){
 			//cutscene render
+			batcher.begin();
 			batcher.setColor(batcherclr.r, batcherclr.g, batcherclr.b, 0.8f);
 			batcher.draw(Assetloader.ui[12],10, gameHeight*0.88f, gameWidth-20, gameHeight*0.12f);
 			batcher.setColor(batcherclr.r, batcherclr.g, batcherclr.b, 1f);
 			Speaker=Myworld.level.dialogs[Myworld.currentDialog].speaker;
 			DIG=Speaker+" : "+Myworld.level.dialogs[Myworld.currentDialog].dialog;
 			Assetloader.font.setColor(Color.BLACK);
-			//Assetloader.font.setScale(1.2f,1.2f);
+			//Assetloader.font.setScale(1.2f,-1.2f);
 			Assetloader.font.draw(batcher,DIG,20, gameHeight*0.9f);
 			batcher.end();
 		}
-		else{
-		//ui
-		//attack-icon
-		batcher.draw(Assetloader.ui[p1.isAttack?2:1],Myworld.c5.x-Myworld.c5.radius, Myworld.c5.y-Myworld.c5.radius, Myworld.c5.radius * 2, Myworld.c5.radius * 2);
-		//potion-icon
-		batcher.draw(Assetloader.ui[0],Myworld.s[4].x-Myworld.s[4].radius, Myworld.s[4].y-Myworld.s[4].radius, Myworld.s[4].radius * 2, Myworld.s[4].radius * 2);
-		//mage-icon
-		batcher.draw(Assetloader.ui[6],Myworld.s[3].x-Myworld.s[3].radius, Myworld.s[3].y-Myworld.s[3].radius, Myworld.s[4].radius * 2, Myworld.s[4].radius * 2);
-		//slide-icon
-		batcher.draw(Assetloader.ui[9],Myworld.s[0].x-Myworld.s[0].radius, Myworld.s[0].y-Myworld.s[0].radius, Myworld.s[4].radius * 2, Myworld.s[4].radius * 2);
-		//airpunch-icon
-		batcher.draw(Assetloader.ui[8],Myworld.s[1].x-Myworld.s[1].radius, Myworld.s[1].y-Myworld.s[1].radius, Myworld.s[4].radius * 2, Myworld.s[4].radius * 2);
-		//hurricane-icon
-		batcher.draw(Assetloader.ui[7],Myworld.s[2].x-Myworld.s[2].radius, Myworld.s[2].y-Myworld.s[2].radius, Myworld.s[4].radius * 2, Myworld.s[4].radius * 2);
-
-		Assetloader.font.setColor(Color.WHITE);
-		Assetloader.font.setScale(0.6f,0.6f);
-		Assetloader.font.draw(batcher,""+Myworld.potions, Myworld.s[4].x-Myworld.s[4].radius, Myworld.s[4].y-Myworld.s[4].radius);
-
-		//level data
-		str="LVL:"+p1.level+"  xp:"+(Myworld.xp-p1.currentlevelxp)+"/"+p1.nextlevelxp;
-		Assetloader.font.setScale(1f,1f);
-		Assetloader.font.draw(batcher, str, (gameWidth/2)-(3*(str.length()+1)), 12);
-		Assetloader.font.setScale(1f,1f);
-		batcher.end();
-		shaper.begin(ShapeType.Line);
-		shaper.setColor(Color.RED);
-	/*	shaper.rect(p1.rect.x, p1.rect.y, p1.rect.width, p1.rect.height);
-		for(Enemy enemy:en)
+		else
 		{
-			shaper.rect(enemy.rect.x,enemy.rect.y,enemy.rect.width,enemy.rect.height);
-			shaper.circle(enemy.getX(),enemy.getY(), 5);
-		}*/
-		/*shaper.circle(Myworld.c1.x, Myworld.c1.y, Myworld.c1.radius);
-		shaper.circle(Myworld.c2.x, Myworld.c2.y, Myworld.c2.radius);
-		shaper.circle(Myworld.c3.x, Myworld.c3.y, Myworld.c3.radius);
-		shaper.circle(Myworld.c4.x, Myworld.c4.y, Myworld.c4.radius);
-		shaper.circle(Myworld.c5.x, Myworld.c5.y, Myworld.c5.radius);*/
-		shaper.circle(Myworld.c6.x, Myworld.c6.y, Myworld.c6.radius);
-		shaper.line(gameWidth-75, 30, gameWidth-75, 50);
 
-		shaper.setColor(Color.WHITE);
-		if(Myworld.lvlbtn)
-		{
-			shaper.circle(Myworld.nxtlvl.x, Myworld.nxtlvl.y, Myworld.nxtlvl.radius);
-			//shaper.line(440, 60, 460, 60);
-			//shaper.line(450, 50, 460, 60);
-			//shaper.line(460, 60, 450, 70);
-		}
+			//ui
+			//stat-bars
+			shaper.begin(ShapeType.Filled);
+			shaper.setAutoShapeType(true);
+			shaper.setColor(Color.RED);
+			shaper.rect(hp.innerbar.x,hp.innerbar.y,hp.innerbar.width,hp.innerbar.height);
+			shaper.setColor(Color.BLUE);
+			shaper.rect(mp.innerbar.x,mp.innerbar.y,mp.innerbar.width,mp.innerbar.height);
+			shaper.setColor(Color.ORANGE);
+			shaper.rect(xp.innerbar.x,xp.innerbar.y,xp.innerbar.width,xp.innerbar.height);
+			shaper.end();
 			
-		//shaper.rect(p1.getX(),p1.getY(),p1.getwidth(),p1.getheight());
-		//shaper.rect(p1.rect.x,p1.rect.y,p1.rect.width,p1.rect.height);
-		//shaper.rect(p1.bulletrect.x,p1.bulletrect.y,p1.bulletrect.width,p1.bulletrect.height);
-		//shaper.rect(platforms[0].getX(),platforms[0].getY(),platforms[0].getwidth(),platforms[0].getheight());
-	
-		Myworld.mpad.render(shaper);
-		/*for(int i=0;i<Myworld.s.length;i++)
-			shaper.circle(Myworld.s[i].x, Myworld.s[i].y, Myworld.s[i].radius);*/
-		//shaper.circle(p1.getX(),p1.getY(), 5);
-		shaper.rect(hp.bar.x,hp.bar.y,hp.bar.width,hp.bar.height);
-		shaper.rect(mp.bar.x,mp.bar.y,mp.bar.width,mp.bar.height);
-		shaper.rect(xp.bar.x,xp.bar.y,xp.bar.width,xp.bar.height);
-		shaper.setAutoShapeType(true);
-		for (Enemy enemy : en)
-			shaper.rect(enemy.rect.x, enemy.rect.y, enemy.rect.width, enemy.rect.height);
-		shaper.set(ShapeType.Filled);
-		for (Enemy enemy : en)
-			if(enemy.isAlive){
-				shaper.rect(enemy.getX()-(enemy.isleft?enemy.width:0),enemy.getY(),enemy.hpb.bar.width,enemy.hpb.bar.height);
-				if(enemy.isboss)
-					shaper.rect(enemy.getX()-(enemy.isleft?enemy.width:0),enemy.getY()-7,enemy.mpb.bar.width,enemy.mpb.bar.height);
-			}
-		shaper.setColor(Color.RED);
-		shaper.rect(hp.innerbar.x,hp.innerbar.y,hp.innerbar.width,hp.innerbar.height);
-		for (Enemy enemy : en) {
-			//shaper.rect(enemy.rect.x, enemy.rect.y, enemy.rect.width, enemy.rect.height);
-			if(enemy.isAlive)
-				shaper.rect(enemy.getX()-(enemy.isleft?enemy.width:0),enemy.getY(),enemy.hpb.innerbar.width,enemy.hpb.innerbar.height);
-			//shaper.rect(enemy.basic.rect.x, enemy.basic.rect.y, enemy.basic.rect.width, enemy.basic.rect.height);
-		}
-		shaper.setColor(Color.BLUE);
-		shaper.rect(mp.innerbar.x,mp.innerbar.y,mp.innerbar.width,mp.innerbar.height);
-		for (Enemy enemy : en) {
-			//shaper.rect(enemy.rect.x, enemy.rect.y, enemy.rect.width, enemy.rect.height);
-			if(enemy.isAlive){
-				if(enemy.isboss)
-					shaper.rect(enemy.getX()-(enemy.isleft?enemy.width:0),enemy.getY()-7,enemy.mpb.innerbar.width,enemy.mpb.innerbar.height);
-					
-			}
-			//shaper.rect(enemy.basic.rect.x, enemy.basic.rect.y, enemy.basic.rect.width, enemy.basic.rect.height);
-		}
-		shaper.setColor(Color.ORANGE);
-		shaper.rect(xp.innerbar.x,xp.innerbar.y,xp.innerbar.width,xp.innerbar.height);
-		
+			batcher.begin();
+			//attack-icon
+			batcher.draw(Assetloader.ui[p1.isAttack?2:1],Myworld.c5.x-Myworld.c5.radius, Myworld.c5.y-Myworld.c5.radius, Myworld.c5.radius * 2, Myworld.c5.radius * 2);
+			//potion-icon
+			batcher.draw(Assetloader.ui[0],Myworld.s[4].x-Myworld.s[4].radius, Myworld.s[4].y-Myworld.s[4].radius, Myworld.s[4].radius * 2, Myworld.s[4].radius * 2);
+			//mage-icon
+			//batcher.draw(Assetloader.ui[3],Myworld.s[3].x-Myworld.s[3].radius-5, Myworld.s[3].y-Myworld.s[3].radius-5, Myworld.s[3].radius * 2 + 10, Myworld.s[3].radius * 2 + 10);
+			batcher.draw(Assetloader.ui[6],Myworld.s[3].x-Myworld.s[3].radius, Myworld.s[3].y-Myworld.s[3].radius, Myworld.s[3].radius * 2, Myworld.s[3].radius * 2);
+			//slide-icon
+			//batcher.draw(Assetloader.ui[3],Myworld.s[0].x-Myworld.s[0].radius-5, Myworld.s[0].y-Myworld.s[0].radius-5, Myworld.s[0].radius * 2 + 10, Myworld.s[0].radius * 2 + 10);
+			batcher.draw(Assetloader.ui[9],Myworld.s[0].x-Myworld.s[0].radius, Myworld.s[0].y-Myworld.s[0].radius, Myworld.s[0].radius * 2, Myworld.s[0].radius * 2);
+			//airpunch-icon
+			//batcher.draw(Assetloader.ui[3],Myworld.s[1].x-Myworld.s[1].radius-5, Myworld.s[1].y-Myworld.s[1].radius-5, Myworld.s[1].radius * 2 + 10, Myworld.s[1].radius * 2 + 10);
+			batcher.draw(Assetloader.ui[8],Myworld.s[1].x-Myworld.s[1].radius, Myworld.s[1].y-Myworld.s[1].radius, Myworld.s[1].radius * 2, Myworld.s[1].radius * 2);
+			//hurricane-icon
+			//batcher.draw(Assetloader.ui[3],Myworld.s[2].x-Myworld.s[2].radius-5, Myworld.s[2].y-Myworld.s[2].radius-5, Myworld.s[2].radius * 2 + 10, Myworld.s[2].radius * 2 + 10);
+			batcher.draw(Assetloader.ui[7],Myworld.s[2].x-Myworld.s[2].radius, Myworld.s[2].y-Myworld.s[2].radius, Myworld.s[2].radius * 2, Myworld.s[2].radius * 2);
+			//switchoff
+			batcher.draw(Assetloader.ui[13],Myworld.c6.x-Myworld.c6.radius, Myworld.c6.y-Myworld.c6.radius, Myworld.c6.radius * 2, Myworld.c6.radius * 2);
 
-		/*shaper.setColor(Color.GREEN);
-		for(int i=0;i<Myworld.mage.size();i++)
-		{
-			mager=Myworld.mage.get(i).rect;
-			shaper.rect(mager.x,mager.y,mager.width,mager.height);
-		}
-		shaper.setColor(Color.YELLOW);
-		for(int i=0;i<Myworld.enemage.size();i++)
-		{
-			mager=Myworld.enemage.get(i).rect;
-			shaper.rect(mager.x,mager.y,mager.width,mager.height);
-		}*/
-		for(int i=0;i<Myworld.barrage.size();i++)
-		{
-			mager=Myworld.barrage.get(i).rect;
-			if(Myworld.barrage.get(i).isActive()){
-				shaper.setColor(Color.GREEN);
-				shaper.rect(mager.x,mager.y,mager.width,mager.height);
+			if(Myworld.lvlbtn)
+			{
+			//next-level
+			batcher.draw(Assetloader.ui[15],Myworld.nxtlvl.x-Myworld.nxtlvl.radius, Myworld.nxtlvl.y-Myworld.nxtlvl.radius, Myworld.nxtlvl.radius * 2, Myworld.nxtlvl.radius * 2);
 			}
-			else if(Myworld.barrage.get(i).isBlasted()){
-				shaper.setColor(Color.RED);
-				shaper.rect(mager.x,mager.y,mager.width,mager.height);
-			}
-		}
-		/*if(p1.isAttack)
-		shaper.rect(p1.basic.rect.x, p1.basic.rect.y, p1.basic.rect.width, p1.basic.rect.height);
+			//stats
+			batcher.draw(Assetloader.ui[19],halfWidth - 150, 5, 300,50);
+			//str="LVL:"+p1.level+"  xp:"+(Myworld.xp-p1.currentlevelxp)+"/"+p1.nextlevelxp;
+			str=""+p1.level;
+			Assetloader.font.setColor(Color.BLACK);
+			Assetloader.font.setScale(0.6f,-0.6f);
+			Assetloader.font.draw(batcher, str, halfWidth-(3*(str.length()+1)), 16);
+			Assetloader.font.setScale(0.75f,-0.75f);
+	
+			//level data
+			Assetloader.font.setColor(Color.WHITE);
+			Assetloader.font.setScale(0.6f,-0.6f);
+			Assetloader.font.draw(batcher,""+Myworld.potions, Myworld.s[4].x-Myworld.s[4].radius, Myworld.s[4].y-Myworld.s[4].radius);
+			batcher.end();
+			
+		/*	shaper.begin(ShapeType.Line);
+			shaper.setColor(Color.RED);
+			shaper.rect(p1.rect.x, p1.rect.y, p1.rect.width, p1.rect.height);
+			for(Enemy enemy:en)
+			{
+				shaper.rect(enemy.rect.x,enemy.rect.y,enemy.rect.width,enemy.rect.height);
+				shaper.circle(enemy.getX(),enemy.getY(), 5);
+			}*/
+			/*shaper.circle(Myworld.c1.x, Myworld.c1.y, Myworld.c1.radius);
+			shaper.circle(Myworld.c2.x, Myworld.c2.y, Myworld.c2.radius);
+			shaper.circle(Myworld.c3.x, Myworld.c3.y, Myworld.c3.radius);
+			shaper.circle(Myworld.c4.x, Myworld.c4.y, Myworld.c4.radius);
+			shaper.circle(Myworld.c5.x, Myworld.c5.y, Myworld.c5.radius);
+			shaper.circle(Myworld.c6.x, Myworld.c6.y, Myworld.c6.radius);
+			shaper.line(gameWidth-75, 30, gameWidth-75, 50);*/
+	
+			shaper.begin(ShapeType.Line);
+			shaper.setColor(Color.WHITE);
+			/*if(Myworld.lvlbtn)
+			{
+				shaper.circle(Myworld.nxtlvl.x, Myworld.nxtlvl.y, Myworld.nxtlvl.radius);
+				//shaper.line(440, 60, 460, 60);
+				//shaper.line(450, 50, 460, 60);
+				//shaper.line(460, 60, 450, 70);
+			}*/
+				
+			//shaper.rect(p1.getX(),p1.getY(),p1.getwidth(),p1.getheight());
+			//shaper.rect(p1.rect.x,p1.rect.y,p1.rect.width,p1.rect.height);
+			//shaper.rect(p1.bulletrect.x,p1.bulletrect.y,p1.bulletrect.width,p1.bulletrect.height);
+			//shaper.rect(platforms[0].getX(),platforms[0].getY(),platforms[0].getwidth(),platforms[0].getheight());
 		
-		/*if(Myworld.getopponent().isAttack && Myworld.getopponent().skill.delay>0)
-		shaper.rect(Myworld.getopponent().skill.rect.x, Myworld.getopponent().skill.rect.y, Myworld.getopponent().skill.rect.width, Myworld.getopponent().skill.rect.height);
-		*/
-		shaper.end();
-		//ui end
+			Myworld.mpad.render(shaper);
+			/*for(int i=0;i<Myworld.s.length;i++)
+				shaper.circle(Myworld.s[i].x, Myworld.s[i].y, Myworld.s[i].radius);
+			//shaper.circle(p1.getX(),p1.getY(), 5);
+			//stat-bars
+			shaper.rect(hp.bar.x,hp.bar.y,hp.bar.width,hp.bar.height);
+			shaper.rect(mp.bar.x,mp.bar.y,mp.bar.width,mp.bar.height);
+			shaper.rect(xp.bar.x,xp.bar.y,xp.bar.width,xp.bar.height);*/
+			shaper.setAutoShapeType(true);
+			/*for (Enemy enemy : en)
+				shaper.rect(enemy.rect.x, enemy.rect.y, enemy.rect.width, enemy.rect.height);*/
+			shaper.set(ShapeType.Filled);
+			for (Enemy enemy : en)
+				if(enemy.isAlive){
+					shaper.rect(enemy.getX()-(enemy.isleft?enemy.width:0),enemy.getY(),enemy.hpb.bar.width,enemy.hpb.bar.height);
+					if(enemy.isboss)
+						shaper.rect(enemy.getX()-(enemy.isleft?enemy.width:0),enemy.getY()-7,enemy.mpb.bar.width,enemy.mpb.bar.height);
+				}
+			shaper.setColor(Color.RED);
+			//shaper.rect(hp.innerbar.x,hp.innerbar.y,hp.innerbar.width,hp.innerbar.height);
+			for (Enemy enemy : en) {
+				//shaper.rect(enemy.rect.x, enemy.rect.y, enemy.rect.width, enemy.rect.height);
+				if(enemy.isAlive)
+					shaper.rect(enemy.getX()-(enemy.isleft?enemy.width:0),enemy.getY(),enemy.hpb.innerbar.width,enemy.hpb.innerbar.height);
+				//shaper.rect(enemy.basic.rect.x, enemy.basic.rect.y, enemy.basic.rect.width, enemy.basic.rect.height);
+			}
+			shaper.setColor(Color.BLUE);
+			//shaper.rect(mp.innerbar.x,mp.innerbar.y,mp.innerbar.width,mp.innerbar.height);
+			for (Enemy enemy : en) {
+				//shaper.rect(enemy.rect.x, enemy.rect.y, enemy.rect.width, enemy.rect.height);
+				if(enemy.isAlive){
+					if(enemy.isboss)
+						shaper.rect(enemy.getX()-(enemy.isleft?enemy.width:0),enemy.getY()-7,enemy.mpb.innerbar.width,enemy.mpb.innerbar.height);
+						
+				}
+				//shaper.rect(enemy.basic.rect.x, enemy.basic.rect.y, enemy.basic.rect.width, enemy.basic.rect.height);
+			}
+			//shaper.setColor(Color.ORANGE);
+			//shaper.rect(xp.innerbar.x,xp.innerbar.y,xp.innerbar.width,xp.innerbar.height);
+			
+	
+			/*shaper.setColor(Color.GREEN);
+			for(int i=0;i<Myworld.mage.size();i++)
+			{
+				mager=Myworld.mage.get(i).rect;
+				shaper.rect(mager.x,mager.y,mager.width,mager.height);
+			}
+			shaper.setColor(Color.YELLOW);
+			for(int i=0;i<Myworld.enemage.size();i++)
+			{
+				mager=Myworld.enemage.get(i).rect;
+				shaper.rect(mager.x,mager.y,mager.width,mager.height);
+			}*/
+			for(int i=0;i<Myworld.barrage.size();i++)
+			{
+				mager=Myworld.barrage.get(i).rect;
+				if(Myworld.barrage.get(i).isActive()){
+					shaper.setColor(Color.GREEN);
+					shaper.rect(mager.x,mager.y,mager.width,mager.height);
+				}
+				else if(Myworld.barrage.get(i).isBlasted()){
+					shaper.setColor(Color.RED);
+					shaper.rect(mager.x,mager.y,mager.width,mager.height);
+				}
+			}
+			/*if(p1.isAttack)
+			shaper.rect(p1.basic.rect.x, p1.basic.rect.y, p1.basic.rect.width, p1.basic.rect.height);
+			
+			/*if(Myworld.getopponent().isAttack && Myworld.getopponent().skill.delay>0)
+			shaper.rect(Myworld.getopponent().skill.rect.x, Myworld.getopponent().skill.rect.y, Myworld.getopponent().skill.rect.width, Myworld.getopponent().skill.rect.height);
+			*/
+			shaper.end();
+			//ui end
 		}
 	}
 	public void dispose() {

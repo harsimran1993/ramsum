@@ -1,0 +1,145 @@
+{
+"data": {
+	"p1": {
+		"class": "GameObjects.Player",
+		"pos": {
+			"x": 326.5,
+			"y": 379
+		},
+		"vel": {},
+		"acc": {
+			"y": 460.00015
+		},
+		"height": 65,
+		"width": 65,
+		"ground": 380,
+		"fixground": 380,
+		"hp": 2749.7515,
+		"mp": 1900.0631,
+		"isAlive": true,
+		"centreX": 358,
+		"centreY": 411,
+		"hurtDamage": 200,
+		"worldCX": 359,
+		"att": 240,
+		"basehp": 2900,
+		"basemp": 1900,
+		"def": 145,
+		"state": "idle",
+		"basic": {
+			"id": 4,
+			"width": 80,
+			"height": 160,
+			"name": "airpunch",
+			"dmgMul": 2.5,
+			"itm": [ 0.42, 0.36 ],
+			"delay": -5.5996885,
+			"timer": 0.42280668,
+			"maxtime": 0.42,
+			"damage": 672,
+			"stage": 1,
+			"maxstage": 2,
+			"LextX": -80,
+			"LextY": -90,
+			"RextY": -90,
+			"rect": {
+				"x": 326.5,
+				"y": 4.993614,
+				"width": 80,
+				"height": 160
+			}
+		},
+		"hurr": {
+			"id": 2,
+			"width": 120,
+			"height": 80,
+			"name": "hurricane",
+			"dmgMul": 1.5,
+			"itm": [ 0.7 ],
+			"maxstage": 1,
+			"LextX": -100,
+			"RextX": -20,
+			"rect": {}
+		},
+		"punch": {
+			"id": 1,
+			"width": 60,
+			"height": 45,
+			"name": "Basic",
+			"itm": [ 0.21, 0.21, 0.3, 0.3, 0.54 ],
+			"delay": -3.796026,
+			"maxstage": 5,
+			"LextX": -100,
+			"LextY": 10,
+			"RextX": 40,
+			"RextY": 10,
+			"rect": {}
+		},
+		"slide": {
+			"id": 3,
+			"width": 200,
+			"height": 70,
+			"name": "Slide",
+			"dmgMul": 2.8,
+			"itm": [ 0.5 ],
+			"delay": 0,
+			"maxstage": 1,
+			"LextX": -165,
+			"RextX": -35,
+			"rect": {}
+		},
+		"uperc": {
+			"id": 4,
+			"width": 80,
+			"height": 160,
+			"name": "airpunch",
+			"dmgMul": 2.5,
+			"itm": [ 0.42, 0.36 ],
+			"delay": -5.5996885,
+			"timer": 0.42280668,
+			"maxtime": 0.42,
+			"damage": 672,
+			"stage": 1,
+			"maxstage": 2,
+			"LextX": -80,
+			"LextY": -90,
+			"RextY": -90,
+			"rect": {
+				"x": 326.5,
+				"y": 4.993614,
+				"width": 80,
+				"height": 160
+			}
+		},
+		"mage": {
+			"id": 5,
+			"width": 60,
+			"height": 45,
+			"name": "mage",
+			"itm": [ 0.21 ],
+			"maxstage": 1,
+			"LextX": -100,
+			"LextY": 10,
+			"RextX": 40,
+			"RextY": 10,
+			"rect": {}
+		},
+		"rect": {
+			"x": 342.75,
+			"y": 379,
+			"width": 32.5,
+			"height": 65
+		},
+		"bulletrect": {
+			"x": 316.5,
+			"y": 369,
+			"width": 85,
+			"height": 85
+		},
+		"name": "Ram Sum",
+		"level": 9,
+		"nextlevelxp": 2475,
+		"currentlevelxp": 2000
+	}
+}
+}

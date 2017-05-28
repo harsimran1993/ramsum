@@ -15,14 +15,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assetloader {
 	public static AssetManager manager;
-	public static Texture enemy[],ramt,ramwt,ramht,ramupT,jmpt,attT,blastT,slideT,hurricaneT,uiT,platformT,specialeffT,levelT;
+	public static Texture enemy[],ramt,ramwt,ramht,ramupT,jmpt,attT,blastT,slideT,hurricaneT,platformT,specialeffT,levelT;
 	public static TextureRegion logo,cloud[],ramtr,grass[],specilaeff[][],ramidle[],ramwalk[],ramhurt[],ramup[],ramko[],jump[],att[],wasp,blast[],slide[],hurricane[],enemywalk[][],enemyatt[][],enemyhit[][],enemydie[][],ui[],platform[],objs[],upwall[];
 	private static TextureParameter param;
 	public static Animation idle,walk,jmp,attAnim,blastA,slideA,hurricaneA,enemystandA[],enemyattackA[],enemyhitA[],enemywalkA[],ramhurtA,ramkoA,ramgetupA,ramupA,specialeffA[],bulletA;
 	public static BitmapFont font;
 	private static Random rand;
 	private static Preferences prefs;
-    private static TextureAtlas shaderidle,shaderatt,shaderhit,shaderwalk,env_Lab;
+    private static TextureAtlas shaderidle,shaderatt,shaderhit,shaderwalk,env_Lab,UI;
 	
 	public static void init()
 	{
@@ -53,7 +53,7 @@ public class Assetloader {
 		att=new TextureRegion[26];
 		slide = new TextureRegion[6];
 		hurricane=new TextureRegion[11];
-		ui=new TextureRegion[13];
+		ui=new TextureRegion[20];
 		ramhurt=new TextureRegion[17];
 		ramko= new TextureRegion[13];
 		ramup=new TextureRegion[13];
@@ -98,6 +98,7 @@ public class Assetloader {
 		shaderhit = new TextureAtlas(Gdx.files.internal("shader/hit.atlas"),true);
 		shaderwalk = new TextureAtlas(Gdx.files.internal("shader/run.atlas"),true);
 		env_Lab= new TextureAtlas(Gdx.files.internal("environment/lab.atlas"),true);
+		UI= new TextureAtlas(Gdx.files.internal("ui/ui.atlas"),true);
 		
 	     //load texture images
 	     manager.load("logo.png",Texture.class,param);
@@ -113,7 +114,6 @@ public class Assetloader {
 	     manager.load("slide.png",Texture.class,param);
 	     manager.load("hurricane.png",Texture.class,param);
 	     manager.load("bigron.png",Texture.class,param);
-	     manager.load("ui.png",Texture.class,param);
 	     manager.load("ram_hurt.png",Texture.class,param);
 	     manager.load("ramupatt.png",Texture.class,param);
 	     manager.load("hencher.png",Texture.class,param);
@@ -136,7 +136,6 @@ public class Assetloader {
 	     enemy[1]=manager.get("wasp.png", Texture.class);
 	     enemy[2]=manager.get("hencher.png", Texture.class);
 	     enemy[3]=manager.get("gaso.png", Texture.class);
-	     uiT=manager.get("ui.png", Texture.class);
 	     ramht=manager.get("ram_hurt.png", Texture.class);
 	     ramupT=manager.get("ramupatt.png", Texture.class);
 	     platformT=manager.get("platform2.png", Texture.class);
@@ -146,23 +145,23 @@ public class Assetloader {
 	     //environment and extras
 	    objs[0]= new TextureRegion(manager.get("fog.png", Texture.class));
 	    objs[0].flip(false, true);
-	    objs[1]=new TextureRegion(env_Lab.findRegion("comp"));
-	    objs[2]=new TextureRegion(env_Lab.findRegion("chair"));
-	    objs[3]=new TextureRegion(env_Lab.findRegion("circuits"));
-	    objs[4]=new TextureRegion(env_Lab.findRegion("circuits2"));
-	    objs[5]=new TextureRegion(env_Lab.findRegion("pipe"));
-	    objs[6]=new TextureRegion(env_Lab.findRegion("panel"));
-	    objs[7]=new TextureRegion(env_Lab.findRegion("panel2"));
-	    objs[8]=new TextureRegion(env_Lab.findRegion("door"));
-	    objs[9]=new TextureRegion(env_Lab.findRegion("shelf"));
-	    objs[10]=new TextureRegion(env_Lab.findRegion("shelf2"));
-	    objs[11]=new TextureRegion(env_Lab.findRegion("ladder"));
+	    objs[1]=env_Lab.findRegion("comp");
+	    objs[2]=env_Lab.findRegion("chair");
+	    objs[3]=env_Lab.findRegion("circuits");
+	    objs[4]=env_Lab.findRegion("circuits2");
+	    objs[5]=env_Lab.findRegion("pipe");
+	    objs[6]=env_Lab.findRegion("panel");
+	    objs[7]=env_Lab.findRegion("panel2");
+	    objs[8]=env_Lab.findRegion("door");
+	    objs[9]=env_Lab.findRegion("shelf");
+	    objs[10]=env_Lab.findRegion("shelf2");
+	    objs[11]=env_Lab.findRegion("ladder");
 		logo = new TextureRegion(manager.get("logo.png", Texture.class), 0, 0, 512, 512);
 		cloud[0] = new TextureRegion(manager.get("cloud.png", Texture.class), 2, 2, 512, 256);
 		cloud[0].flip(false, true); 
 		cloud[1] = new TextureRegion(manager.get("night.png", Texture.class), 0, 0, 512, 256);
 		cloud[1].flip(false, true); 
-		cloud[2] = new TextureRegion(env_Lab.findRegion("walln"));
+		cloud[2] = env_Lab.findRegion("walln");
 		//cloud[2].flip(false, true);
 		platform[0] = new TextureRegion(platformT,0,4,256,82);
 	    platform[0].flip(false, true);
@@ -170,9 +169,9 @@ public class Assetloader {
 	    platform[1].flip(false, true);
 	    platform[2] = new TextureRegion(levelT, 516, 3, 392, 128);
 	    platform[2].flip(false, true);
-	    platform[3] =new TextureRegion(env_Lab.findRegion("tankbrokenA"));
-	    platform[4] =new TextureRegion(env_Lab.findRegion("table"));
-	    platform[5] =new TextureRegion(env_Lab.findRegion("elevator"));
+	    platform[3] =env_Lab.findRegion("tankbrokenA");
+	    platform[4] =env_Lab.findRegion("table");
+	    platform[5] =env_Lab.findRegion("elevator");
 		//ramtr= new TextureRegion(ramt, 2, 306, 130, 150);
 		//ramtr.flip(false, true);
 		grass[0]= new TextureRegion(levelT, 2, 68, 512, 64);
@@ -184,34 +183,28 @@ public class Assetloader {
 		grass[3]= new TextureRegion(levelT, 516, 226, 508, 64);
 		grass[3].flip(false, true);
 		
-		upwall[0]=new TextureRegion(env_Lab.findRegion("upwall"));
+		upwall[0]=env_Lab.findRegion("upwall");
 		
-		ui[0]=new TextureRegion(uiT, 315, 52, 64, 64);//potion
-		ui[0].flip(false, true);
-		ui[1]=new TextureRegion(uiT, 2, 2, 179, 180);//baseatt
-		ui[1].flip(false, true);
-		ui[2]=new TextureRegion(uiT, 838, 72, 176, 176);//baseatt2
-		ui[2].flip(false, true);
-		ui[3]=new TextureRegion(uiT, 183, 40, 30, 10);//text-arrow
-		ui[3].flip(false, true);
-		ui[4]=new TextureRegion(uiT, 183, 118, 64, 64);//bullet1
-		ui[4].flip(false, true);
-		ui[5]=new TextureRegion(uiT, 183, 52, 64, 64);//bullet2
-		ui[5].flip(false, true);
-		ui[6]=new TextureRegion(uiT, 249, 118, 64, 64);//mage-att
-		ui[6].flip(false, true);
-		ui[7]=new TextureRegion(uiT, 249, 52, 64, 64);//hurricane-att
-		ui[7].flip(false, true);
-		ui[8]=new TextureRegion(uiT, 315, 118, 64, 64);//airpunch-att
-		ui[8].flip(false, true);
-		ui[9]=new TextureRegion(uiT, 381, 118, 64, 64);//slide-att
-		ui[9].flip(false, true);
-		ui[10]=new TextureRegion(uiT, 838, 32, 46, 38);//item-slot
-		ui[10].flip(false, true);
-		ui[11]=new TextureRegion(uiT, 516, 9, 320, 239);//inventory
-		ui[11].flip(false, true);
-		ui[12]=new TextureRegion(uiT, 2, 184, 512, 64);//text-board
-		ui[12].flip(false, true);
+		ui[0]=UI.findRegion("potionicon");//potion
+		ui[1]=UI.findRegion("uibaseatt");//baseatt
+		ui[2]=UI.findRegion("uibaseatt2");//baseatt2
+		ui[3]=UI.findRegion("ring");//ui-ring
+		ui[4]=UI.findRegion("bullet3");//bullet1
+		ui[5]=UI.findRegion("bullet2");//bullet2
+		ui[6]=UI.findRegion("fire");//mage-att
+		ui[7]=UI.findRegion("huricane");//hurricane-att
+		ui[8]=UI.findRegion("jumpatt");//airpunch-att
+		ui[9]=UI.findRegion("slide");//slide-att
+		ui[10]=UI.findRegion("slotback");//item-slot
+		ui[11]=UI.findRegion("inventory");//inventory
+		ui[12]=UI.findRegion("textbubble");//text-board
+		ui[13]=UI.findRegion("switchoff3");//switch-offA
+		ui[14]=UI.findRegion("switchoff4");//switch-offB
+		ui[15]=UI.findRegion("nextlvl");//next-levelA
+		ui[16]=UI.findRegion("nextlvl2");//next-levelB
+		ui[17]=UI.findRegion("hand");//handA
+		ui[18]=UI.findRegion("hand2");//handB
+		ui[19]=UI.findRegion("statbar");//stat-bar
 		
 		//special effect
 		
@@ -805,7 +798,9 @@ public class Assetloader {
 		bulletA=new Animation(0.06f, ui[4],ui[5]);
 		bulletA.setPlayMode(Animation.PlayMode.LOOP);
 		
-		font=new BitmapFont(true);
+		//font=new BitmapFont(true);
+        font=new BitmapFont(Gdx.files.internal("font/font.fnt"));
+        font.setScale(0.75f,-0.75f);
 		
 
 		prefs = Gdx.app.getPreferences("Ramsum");
@@ -817,7 +812,7 @@ public class Assetloader {
 		//setXP(0);
 	}
 
-	public static double getrandom(int f)
+	public static float getrandom(int f)
 	{
 		return rand.nextInt(f);
 	}
@@ -850,9 +845,9 @@ public class Assetloader {
 		shaderhit.dispose();
 		shaderwalk.dispose();
 		env_Lab.dispose();
+		UI.dispose();
 		for(int i=0;i<enemy.length;i++)
 			enemy[i].dispose();
-		uiT.dispose();
 		platformT.dispose();
 		specialeffT.dispose();
 		levelT.dispose();

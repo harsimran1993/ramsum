@@ -536,8 +536,8 @@ public boolean isko() {
 
 public void updateLevel(int xp){
 	level = (int) (Math.floor(25 + Math.sqrt(625 + 100 * xp)) / 50);
-	nextlevelxp = 25 * (level + 1) * ( 2 + (level + 1));
-	currentlevelxp = 25 * (level) * (2 + (level));
+	nextlevelxp = 25 * (level) * ( 2 + (level));
+	currentlevelxp = 25 * (level - 1) * (2 + (level - 1));
 	basehp=2000+100*level;
 	hp=basehp;
 	basemp=1000+100*level;

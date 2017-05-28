@@ -63,10 +63,10 @@ public class GameWorld {
 	public ArrayList<SceneObj> objs;
 	//dialog
 	
-	public GameWorld( RamSumGame ramSumGame, int gameWidth,int gameHeight, Boolean multiplayer, String username,int lvl,Boolean newgame) {
+	public GameWorld( RamSumGame ramSumGame, int gameWidth,int gameHeight, Boolean multiplayer,int lvl,Boolean newgame) {
 		json = new Json();
 		this.game=ramSumGame;
-		this.current_lvl=lvl;
+		//this.current_lvl=lvl;
 		this.nxtlevel=current_lvl+1;
 		// TODO Auto-generated constructor stub
 		this.level=new Level();
@@ -103,7 +103,7 @@ public class GameWorld {
 			p1.setFixGround(level.g);
 			p1.resetGround();
 		}
-		xpBar =new Bar(p1.nextlevelxp-p1.currentlevelxp, 5, 25, gameWidth/3-90, 5);
+		xpBar =new Bar(p1.nextlevelxp-p1.currentlevelxp, (int) (gameWidth * 0.5f)-26, 46, 50, 6);
 		//p2=new Player(380, 214, 80, 80, midPointY +54,true,0);
 		s = new Circle[5];
 		//multi=multiplayer;
@@ -384,7 +384,7 @@ public class GameWorld {
 					xp+=en.get(i).getBaseHealth()/50;
 					if(xp > p1.nextlevelxp){
 						p1.updateLevel(xp);
-						xpBar = new Bar(p1.nextlevelxp-p1.currentlevelxp, 5, 25, gameWidth/3-90, 5);
+						xpBar = new Bar(p1.nextlevelxp-p1.currentlevelxp, (int) (gameWidth * 0.5f)-31, 46, 60, 6);
 					}
 					Assetloader.setXP(xp);
 				}

@@ -51,7 +51,7 @@ public class GameWorld {
 	int potions=40;
 	private float healtimer=-1,distance=300,maxdist;
 	//change levels
-	public int current_lvl=3,nxtlevel=1,currentDialog=0,ground=0,gameWidth,gameHeight;
+	public int current_lvl=4,nxtlevel=1,currentDialog=0,ground=0,gameWidth,gameHeight;
 	public boolean levelupdate=false,lvlbtn=false,cutScene=true;
 	//bullets
 	public ArrayList<bullet> mage,enemage;
@@ -66,7 +66,7 @@ public class GameWorld {
 	public GameWorld( RamSumGame ramSumGame, int gameWidth,int gameHeight, Boolean multiplayer,int lvl,Boolean newgame) {
 		json = new Json();
 		this.game=ramSumGame;
-		//this.current_lvl=lvl;
+		this.current_lvl=lvl;
 		this.nxtlevel=current_lvl+1;
 		// TODO Auto-generated constructor stub
 		this.level=new Level();
@@ -112,9 +112,12 @@ public class GameWorld {
 		{*/
 			gamestate=GAMESTATE.CUTSCENE;
 			en = new ArrayList<Enemy>();
-			for(int i=0;i<level.NOE;i++)
+			for(int i=0;i<level.NOE;i++){
 				en.add(new Enemy(level.enemy[i].type,level.enemy[i].x,level.enemy[i].y,level.enemy[i].w,level.enemy[i].h,level.enemy[i].g,level.enemy[i].fly,level.enemy[i].lvl,level.enemy[i].isboss));
-			/*}
+				if(!level.enemy[i].canWalk)
+					en.get(i).disableWalk();
+			}
+		/*}
 		else if(multiplayer)
 		{
 			gamestate=GAMESTATE.MULTIPLAYER;
@@ -243,7 +246,7 @@ public class GameWorld {
 			for(Enemy enemy:en)
 			if(enemy.isAlive && mage.get(i).collision(enemy.rect))
 			{
-				enemy.hurt(300,(enemy.getX()-mage.get(i).rect.x)>0?20:-20);
+				enemy.hurt(mage.get(i).getDMG(),(enemy.getX()-mage.get(i).rect.x)>0?20:-20);
 				mage.remove(i);
 				i--;
 				System.out.println("bullet removed after hit");
@@ -262,7 +265,7 @@ public class GameWorld {
 			else{
 				if(p1.isAlive && enemage.get(i).collision(p1.bulletrect))
 				{
-					p1.hurt(200,(p1.getX()-enemage.get(i).rect.x)>0);
+					p1.hurt(enemage.get(i).getDMG(),(p1.getX()-enemage.get(i).rect.x)>0);
 					enemage.remove(i);
 					i--;
 					System.out.println("bullet removed after hit");
@@ -279,7 +282,7 @@ public class GameWorld {
 			}
 			else if(p1.isAlive && brg.collision(p1.bulletrect))
 				{
-					p1.hurt((int) (p1.getHP() * 0.2f));
+					p1.hurt(brg.getDMG());
 					brg.blast();
 				}
 			else if(brg.rect.y>ground-brg.rect.height){

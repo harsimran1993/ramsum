@@ -92,18 +92,18 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		plats[3]=new Platform_data(5900, 230, 180, 60,0,true);
 		plats[4]=new Platform_data(7000, 210, 180, 60,0,true,10);
 		
-		enemy[0]=new Enemy_data(4,600, 130, 85, 65, g,false,level,false);
-		enemy[1]=new Enemy_data(4,650, 130, 85, 65, g,false,level,false);
-		enemy[2]=new Enemy_data(4,1950, 130, 85, 65, g,false,level,false);
-		enemy[3]=new Enemy_data(3,3010, 130, 76, 80, g-11,false,level,false);
-		enemy[4]=new Enemy_data(4,2890, 130, 85, 65, g,false,level,false);
-		enemy[5]=new Enemy_data(4,3290, 130, 85, 65, g,false,level,false);
-		enemy[6]=new Enemy_data(3,5000, 130, 76, 80, g-11,false,level,false);
-		enemy[7]=new Enemy_data(4,4800, 130, 85, 65, g,false,level,false);
-		enemy[8]=new Enemy_data(4,5100, 130, 85, 65, g,false,level,false);
-		enemy[9]=new Enemy_data(4,4900, 130, 85, 65, g,false,level,false);
-		enemy[10]=new Enemy_data(3,6900, 100, 76, 80, g-11,false,level,false);
-		enemy[11]=new Enemy_data(3,7000, 100, 76, 80, g-11,false,level,false);
+		enemy[0]=new Enemy_data(4,600, g-2, 85, 65, g,false,level,false);
+		enemy[1]=new Enemy_data(4,650, g-2, 85, 65, g,false,level,false);
+		enemy[2]=new Enemy_data(4,1950, g-2, 85, 65, g,false,level,false);
+		enemy[3]=new Enemy_data(3,3010, g-13, 76, 80, g-11,false,level,false);
+		enemy[4]=new Enemy_data(4,2890, g-2, 85, 65, g,false,level,false);
+		enemy[5]=new Enemy_data(4,3290, g-2, 85, 65, g,false,level,false);
+		enemy[6]=new Enemy_data(3,5000, g-13, 76, 80, g-11,false,level,false);
+		enemy[7]=new Enemy_data(4,4800, g-2, 85, 65, g,false,level,false);
+		enemy[8]=new Enemy_data(4,5100, g-2, 85, 65, g,false,level,false);
+		enemy[9]=new Enemy_data(4,4900, g-2, 85, 65, g,false,level,false);
+		enemy[10]=new Enemy_data(3,6900, g-13, 76, 80, g-11,false,level,false);
+		enemy[11]=new Enemy_data(3,7000, g-13, 76, 80, g-11,false,level,false);
 		break;
 	
 	case 3:
@@ -136,16 +136,16 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		plats[5]=new Platform_data(5790, 330, 320, 150,1,false);
 		//plats[6]=new Platform_data(6000, 335, 200, 60,2,false);
 		
-		enemy[0]=new Enemy_data(0,4500, 131, 152, 160, g-91,false,3,true);
-		enemy[1]=new Enemy_data(3,650, 131, 76, 80, g-11,false,level,false);
-		enemy[2]=new Enemy_data(4,900, 130, 85, 65, g,false,level,false);
-		enemy[3]=new Enemy_data(3,1190, 131, 76, 80, g-11,false,level,false);
-		enemy[4]=new Enemy_data(3,1590, 131, 76, 80, g-11,false,level,false);
-		enemy[5]=new Enemy_data(4,2000, 130, 85, 65, g,false,level,false);
-		enemy[6]=new Enemy_data(3,2500, 100, 76, 80, g-11,false,level,false);
-		enemy[7]=new Enemy_data(4,2800, 130, 85, 65, g,false,level,false);
-		enemy[8]=new Enemy_data(3,3300, 100, 76, 80, g-15,false,level,false);
-		enemy[9]=new Enemy_data(3,3300, 100, 76, 80, g-11,false,level,false);
+		enemy[0]=new Enemy_data(0,4500, g-93, 152, 160, g-91,false,3,true);
+		enemy[1]=new Enemy_data(3,650, g-13, 76, 80, g-11,false,level,false);
+		enemy[2]=new Enemy_data(4,900, g-2, 85, 65, g,false,level,false);
+		enemy[3]=new Enemy_data(3,1190, g-13, 76, 80, g-11,false,level,false);
+		enemy[4]=new Enemy_data(3,1590, g-13, 76, 80, g-11,false,level,false);
+		enemy[5]=new Enemy_data(4,2000, g-2, 85, 65, g,false,level,false);
+		enemy[6]=new Enemy_data(3,2500, g-13, 76, 80, g-11,false,level,false);
+		enemy[7]=new Enemy_data(4,2800, g-2, 85, 65, g,false,level,false);
+		enemy[8]=new Enemy_data(3,3300, g-17, 76, 80, g-15,false,level,false);
+		enemy[9]=new Enemy_data(3,3300, g-13, 76, 80, g-11,false,level,false);
 		break;
 	
 	case 4:
@@ -154,9 +154,9 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		g=330+160;
 		grassg=gameHeight-45;
 		hurtg=g-10;
-		NOE=0;
+		NOE=1;
 		NOP=20;
-		NOD=11;
+		NOD=1;
 		NOO=0;
 		back=0;
 		maxdist=4600;
@@ -168,8 +168,8 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		dialogs=new Dialog_data[NOD];
 		objd= new object_data[NOO];
 		
-		dialogs[0]=new Dialog_data("Ramsum","Who,what are you?");
-		dialogs[1]=new Dialog_data("Vile Creature", "I am called CHRONIC but you might know me as 'John Valence'.");
+		dialogs[0]=new Dialog_data("System","Detecting vast Amount of Nanogen");
+		/*dialogs[1]=new Dialog_data("", "I am called CHRONIC but you might know me as 'John Valence'.");
 		dialogs[2]=new Dialog_data("Ramsum","Yooouuuu!!! blooody murderer !!! I will kill you.");
 		dialogs[3]=new Dialog_data("Chronic", "kill me? I saved you. It was lensher he alone is responsible for what");
 		dialogs[4]=new Dialog_data("Chronic", "happended to you, your wife, and ME!!!");
@@ -178,7 +178,7 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		dialogs[7]=new Dialog_data("Ramsum","Atone!!! for your sins with your life.");
 		dialogs[8]=new Dialog_data("Chronic", "Idiot!!! I had a hunch you were a useless tool.");
 		dialogs[9]=new Dialog_data("Chronic", "So you see i made some enhancements on myself too.");
-		dialogs[10]=new Dialog_data("Chronic", "Come and be a milestone in my growth!!");
+		dialogs[10]=new Dialog_data("Chronic", "Come and be a milestone in my growth!!");*/
 		
 		plats[0]=new Platform_data(-200, 335, 200, 60,2,false);
 		plats[1]=new Platform_data(0, 335, 200, 60,2,false);
@@ -200,7 +200,9 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		plats[17]=new Platform_data(4200, 335, 200, 60,2,false);
 		plats[18]=new Platform_data(4400, 335, 200, 60,2,false);
 		plats[19]=new Platform_data(4600, 335, 200, 60,2,false);
-		
+
+		enemy[0]=new Enemy_data(5,4500, 334, 120, 100, 234,false,3,true);
+		enemy[0].setWalk(false);
 			break;
 			
 	default:
@@ -221,33 +223,33 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		dialogs=new Dialog_data[NOD];
 		objd= new object_data[NOO];
 		
-		dialogs[0]=new Dialog_data("System", "...");
+		dialogs[0]=new Dialog_data("System", "Dimension Shattered!!!");
 
-		plats[0]=new Platform_data(120, 180, 180, 60,0,true);
-		plats[1]=new Platform_data(500, 180, 180, 60,0,true);
-		plats[2]=new Platform_data(1100, 170, 180, 60,0,true);
-		plats[3]=new Platform_data(1600, 130, 180, 60,0,true);
-		plats[4]=new Platform_data(2200, 110, 180, 60,0,true);
+		plats[0]=new Platform_data(150, g-220, 220, 60,0,true,50);
+		plats[1]=new Platform_data(1500, g-160, 180, 60,0,true);
+		plats[2]=new Platform_data(2550, g-180, 220, 60,0,true,60);
+		plats[3]=new Platform_data(3800, g-200, 220, 60,0,true,90);
+		plats[4]=new Platform_data(4730, g-240, 220, 60,0,true,50);
+		plats[5]=new Platform_data(5790, 330, 320, 150,1,false);
+		//plats[6]=new Platform_data(6000, 335, 200, 60,2,false);
 		
-		enemy[0]=new Enemy_data(0,4500, 131, 152, 160, 131,false,3,true);
-		enemy[1]=new Enemy_data(1,350, 130, 60, 60, 211,true,level,false);
-		enemy[2]=new Enemy_data(3,650, 131, 76, 80, 211,false,level,false);
-		enemy[3]=new Enemy_data(1,910, 130, 60, 60, 211,true,level,false);
-		enemy[4]=new Enemy_data(3,1190, 131, 76, 80, 211,false,level,false);
-		enemy[5]=new Enemy_data(3,1590, 131, 76, 80, 211,false,level,false);
-		enemy[6]=new Enemy_data(1,2000, 130, 60, 60, 211,true,level,false);
-		enemy[7]=new Enemy_data(3,2500, 100, 76, 80, 211,false,level,false);
-		enemy[8]=new Enemy_data(1,2800, 100, 60, 60, 211,true,level,false);
-		enemy[9]=new Enemy_data(3,3300, 100, 76, 80, 211,false,level,false);
-		enemy[9]=new Enemy_data(3,3300, 100, 76, 80, g-11,false,level,false);
+		enemy[0]=new Enemy_data(0,4500, g-93, 152, 160, g-91,false,3,true);
+		enemy[1]=new Enemy_data(3,650, g-13, 76, 80, g-11,false,level,false);
+		enemy[2]=new Enemy_data(4,900, g-2, 85, 65, g,false,level,false);
+		enemy[3]=new Enemy_data(3,1190, g-13, 76, 80, g-11,false,level,false);
+		enemy[4]=new Enemy_data(3,1590, g-13, 76, 80, g-11,false,level,false);
+		enemy[5]=new Enemy_data(4,2000, g-2, 85, 65, g,false,level,false);
+		enemy[6]=new Enemy_data(3,2500, g-13, 76, 80, g-11,false,level,false);
+		enemy[7]=new Enemy_data(4,2800, g-2, 85, 65, g,false,level,false);
+		enemy[8]=new Enemy_data(3,3300, g-17, 76, 80, g-15,false,level,false);
+		enemy[9]=new Enemy_data(3,3300, g-13, 76, 80, g-11,false,level,false);
 		break;
 	}
 }
 
 public class Enemy_data{
 	public int type,x,y,w,h,g,lvl;
-	public boolean fly;
-	public boolean isboss;
+	public boolean fly,isboss,canWalk=true;
 	public Enemy_data(int type,int x,int y,int w,int h,int g,boolean fly,int lvl,boolean isboss)
 	{
 		this.type=type;
@@ -259,6 +261,10 @@ public class Enemy_data{
 		this.fly=fly;
 		this.lvl=lvl;
 		this.isboss=isboss;
+	}
+	
+	public void setWalk(Boolean walk){
+		this.canWalk=walk;
 	}
 	
 }

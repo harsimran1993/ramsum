@@ -436,8 +436,10 @@ public class GameRenderer {
 			shaper.rect(mp.bar.x,mp.bar.y,mp.bar.width,mp.bar.height);
 			shaper.rect(xp.bar.x,xp.bar.y,xp.bar.width,xp.bar.height);*/
 			shaper.setAutoShapeType(true);
-			/*for (Enemy enemy : en)
-				shaper.rect(enemy.rect.x, enemy.rect.y, enemy.rect.width, enemy.rect.height);*/
+			/*for (Enemy enemy : en){
+				shaper.rect(enemy.rect.x, enemy.rect.y, enemy.rect.width, enemy.rect.height);
+				shaper.rect(enemy.innerrect.x, enemy.innerrect.y, enemy.innerrect.width, enemy.innerrect.height);
+			}*/
 			shaper.set(ShapeType.Filled);
 			for (Enemy enemy : en)
 				if(enemy.isAlive){

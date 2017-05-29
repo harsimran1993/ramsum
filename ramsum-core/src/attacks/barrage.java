@@ -10,15 +10,16 @@ public class barrage {
 	private float vely, blasttimer = 0;
 	private enum State{ active, blasted, obsolette};
 	private State state;
-	private static int velys = 700;
+	private static int velys = 700,damage;
 	private static float blastT = 0.6f;
 	
-	public barrage(float x,float y, int width, int height,int type){
+	public barrage(float x,float y, int width, int height,int damage,int type){
 		rect = new Rectangle(x , y, width, height);
 		this.vely = velys;
 		this.type = type;
 		this.state = State.active;
 		this.blasttimer=blastT;
+		this.damage = damage;
 	}
 	public void update(float delta){
 		if(isActive())
@@ -56,6 +57,10 @@ public class barrage {
 	
 	public boolean isobsolette(){
 		return state == State.obsolette;
+	}
+
+	public int getDMG(){
+		return damage;
 	}
 }
 

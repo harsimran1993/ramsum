@@ -4,49 +4,53 @@
 		"class": "GameObjects.Player",
 		"pos": {
 			"x": 326.5,
-			"y": 379
+			"y": 268.72534
 		},
-		"vel": {},
+		"vel": {
+			"x": -360,
+			"y": 219.60518
+		},
 		"acc": {
-			"y": 460.00015
+			"y": 460.0007
 		},
 		"height": 65,
 		"width": 65,
 		"ground": 380,
+		"koTime": 0.03388563,
 		"fixground": 380,
-		"hp": 2749.7515,
-		"mp": 1900.0631,
+		"hp": 3300,
+		"mp": 2300,
 		"isAlive": true,
 		"centreX": 358,
-		"centreY": 411,
-		"hurtDamage": 200,
+		"centreY": 297,
+		"hurtDamage": 250,
 		"worldCX": 359,
-		"att": 240,
-		"basehp": 2900,
-		"basemp": 1900,
-		"def": 145,
+		"att": 280,
+		"basehp": 3300,
+		"basemp": 2300,
+		"def": 165,
 		"state": "idle",
 		"basic": {
-			"id": 4,
-			"width": 80,
-			"height": 160,
-			"name": "airpunch",
-			"dmgMul": 2.5,
-			"itm": [ 0.42, 0.36 ],
-			"delay": -5.5996885,
-			"timer": 0.42280668,
+			"id": 1,
+			"width": 60,
+			"height": 45,
+			"name": "Basic",
+			"itm": [ 0.21, 0.21, 0.3, 0.3, 0.54 ],
+			"delay": -29.093538,
+			"timer": 0.425372,
 			"maxtime": 0.42,
-			"damage": 672,
-			"stage": 1,
-			"maxstage": 2,
-			"LextX": -80,
-			"LextY": -90,
-			"RextY": -90,
+			"damage": 500,
+			"stage": 2,
+			"maxstage": 5,
+			"LextX": -100,
+			"LextY": 10,
+			"RextX": 40,
+			"RextY": 10,
 			"rect": {
-				"x": 326.5,
-				"y": 4.993614,
-				"width": 80,
-				"height": 160
+				"x": 351,
+				"y": 270.43127,
+				"width": 60,
+				"height": 45
 			}
 		},
 		"hurr": {
@@ -67,13 +71,22 @@
 			"height": 45,
 			"name": "Basic",
 			"itm": [ 0.21, 0.21, 0.3, 0.3, 0.54 ],
-			"delay": -3.796026,
+			"delay": -29.093538,
+			"timer": 0.425372,
+			"maxtime": 0.42,
+			"damage": 500,
+			"stage": 2,
 			"maxstage": 5,
 			"LextX": -100,
 			"LextY": 10,
 			"RextX": 40,
 			"RextY": 10,
-			"rect": {}
+			"rect": {
+				"x": 351,
+				"y": 270.43127,
+				"width": 60,
+				"height": 45
+			}
 		},
 		"slide": {
 			"id": 3,
@@ -95,10 +108,9 @@
 			"name": "airpunch",
 			"dmgMul": 2.5,
 			"itm": [ 0.42, 0.36 ],
-			"delay": -5.5996885,
-			"timer": 0.42280668,
+			"delay": -16.756794,
+			"timer": 0.4368883,
 			"maxtime": 0.42,
-			"damage": 672,
 			"stage": 1,
 			"maxstage": 2,
 			"LextX": -80,
@@ -106,7 +118,7 @@
 			"RextY": -90,
 			"rect": {
 				"x": 326.5,
-				"y": 4.993614,
+				"y": 289,
 				"width": 80,
 				"height": 160
 			}
@@ -126,20 +138,20 @@
 		},
 		"rect": {
 			"x": 342.75,
-			"y": 379,
+			"y": 265.0481,
 			"width": 32.5,
 			"height": 65
 		},
 		"bulletrect": {
 			"x": 316.5,
-			"y": 369,
+			"y": 255.0481,
 			"width": 85,
 			"height": 85
 		},
 		"name": "Ram Sum",
-		"level": 9,
-		"nextlevelxp": 2475,
-		"currentlevelxp": 2000
+		"level": 13,
+		"nextlevelxp": 4875,
+		"currentlevelxp": 4200
 	}
 }
 }

@@ -109,16 +109,18 @@ public class InputHandler implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-		if(myWorld.isCUTSCENE()){
-			if(myWorld.endCuteScene()){
-				myWorld.setNORM();
-			}
-			myWorld.currentDialog++;
-			return true;
-		}
 		// TODO Auto-generated method stub
 		inputX=(int) (screenX*width/Gdx.graphics.getWidth());
 		inputY=(int) (screenY*height/Gdx.graphics.getHeight());
+		if(myWorld.isCUTSCENE()){
+			if(inputX > 10 && inputX < myWorld.gameWidth-20 && inputY > myWorld.gameHeight*0.88f){
+				if(myWorld.endCuteScene()){
+					myWorld.setNORM();
+				}
+				myWorld.currentDialog++;
+			}
+			return true;
+		}
 		if(myWorld.isWin())
 			{
 				myWorld.reset();

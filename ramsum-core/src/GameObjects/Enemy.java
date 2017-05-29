@@ -18,7 +18,7 @@ public class Enemy {
 	public float height,width,timer=0,hurttime=0,hittime=0,spawnTime=0.60f,tempwidth,fixwidth,hurtmax;
 	public int hp;
 	public int mp,att,def,hurtdamage,hurtratio,damage;
-	public Rectangle rect;
+	public Rectangle rect,innerrect;
 	private float ground,atttime,distance,idlewalkdist=-1,attackrange,alertrange,movevel,attackdelay;
 	public boolean isAlive,isscored=false,isfly=false,shot[],isleft=false,isboss=false;
 	private boolean hurt;
@@ -27,23 +27,7 @@ public class Enemy {
 	private boolean walk=true,isranger=false,isOnScreen,specfired=false;
 	public int type,minionoffset;
 	public Bar hpb,mpb;
-	private int health[]={5000,1200,1500,750,1200,20000};
-	int attack[]={300,30,60,125,100,250};
-	int defense[]={500,20,40,30,120,200};
-	int attrange[]={200,150,150,300,50,200};
-	int alrtrange[]={660,600,600,650,200,2000};
-	int hurtrto[]={10,2,4,5,3,10};
-	int minoff[]={0,0,2,1,1,1};
-	int bossoff[]={0,0,0,0,0,1};
-	float attackTime[]={2.4f,1.0f,2.4f,1.4f,1.2f,2.4f};//hit the player after atttime duration
-	public float hitTime[][]={{2.4f},{0.6f},{2.4f},{0.4f},{0.3f,0.6f},{0.8f,1.7f,2.3f}};
-	float Velv[]={10,120,11,20,100,400};//movement vel
-	float Awmul[]={1,1,1,2,1,1};//temp width when attacking
-	float hurttm[]={0.36f,0.54f,0.36f,0.30f,0.24f,0.72f};//hurt animation time
-	float attackdely[]={3f,2f,2f,2f,1f,2f};//delay between consecutive hits
 	public float dialogtime=0;
-	String dialogs[]={"smash!!","Face me Coward!!","Ha Ha Ha Ha","Face My Wrath!!!"};
-	int specseq[]={1,0,0,0,0,2};
 	int currentspec=0;
 	public int level=1;
 	//public skill basic;
@@ -60,31 +44,32 @@ public class Enemy {
 		/*if(type==1)   //non moving boss
 			walk=false;*/
 		spawnTime=0.60f;
-		hp=health[type]+(health[type]*(level-1))/2;
-		att=attack[type]+(attack[type]*(level-1))/2;
-		def=defense[type]+(defense[type]*(level-1))/2;
-		atttime=attackTime[type];
-		attackrange=attrange[type];
-		alertrange=alrtrange[type];
-		hurtratio=hurtrto[type];
-		minionoffset=minoff[type];
-		hurtmax=hurttm[type];
-		movevel=(float) (Velv[type]+Assetloader.getrandom((int) (Velv[type] * 0.5f)));
+		hp=EnemyConst.health[type]+(EnemyConst.health[type]*(level-1))/2;
+		att=EnemyConst.attack[type]+(EnemyConst.attack[type]*(level-1))/2;
+		def=EnemyConst.defense[type]+(EnemyConst.defense[type]*(level-1))/2;
+		atttime=EnemyConst.attackTime[type];
+		attackrange=EnemyConst.attrange[type];
+		alertrange=EnemyConst.alrtrange[type];
+		hurtratio=EnemyConst.hurtrto[type];
+		minionoffset=EnemyConst.minoff[type];
+		hurtmax=EnemyConst.hurttm[type];
+		movevel=(float) (EnemyConst.Velv[type]+Assetloader.getrandom((int) (EnemyConst.Velv[type] * 0.5f)));
 		attackdelay=0;
 		State=state.idle;
 		isAlive=true;
 		this.width=width;
 		this.fixwidth=width;
-		tempwidth=width*Awmul[type];
+		tempwidth=width*EnemyConst.Awmul[type];
 		this.height=height;
 		this.ground=g;
 		pos = new Vector2(x, y);
 		vel = new Vector2(0, 0);
 		acc = new Vector2(0, 460);
 		rect= new Rectangle(x, y, width, height);
+		innerrect= new Rectangle(x + width * 0.25f, y, width * 0.5f, height);
 		this.isfly=fly;
 		hpb=new Bar((float)hp,(int) this.pos.x,(int) this.pos.y,(int) width, 5);
-		shot=new boolean[hitTime.length];
+		shot=new boolean[EnemyConst.hitTime.length];
 		if(type == 3 || type == 5)
 			this.isranger=true;
 		this.isboss=isboss;
@@ -113,24 +98,35 @@ public class Enemy {
 			
 			case 0:
 				break;
-			case 1:world.DropBarrage(new barrage(p1.getX(), 10, (int) p1.getwidth(), 60, 1));
+			case 1:world.DropBarrage(new barrage(p1.getX(), 10, (int) p1.getwidth(), 60,att * 4, 1));
 				break;
 			
-			default:world.DropBarrage(new barrage(p1.getX(), 10, (int) p1.getwidth(), 60, 1));
+			default:world.DropBarrage(new barrage(p1.getX(), 10, (int) p1.getwidth(), 60,att * 4, 1));
 			}
 		}
 		distance=(float) Math.sqrt((p1.centreX-pos.x)*(p1.centreY-pos.x)) + 1;
-		/*if(rect.overlaps(p1.rect))
+		
+		if(innerrect.overlaps(p1.rect))
 		{
-			if(p1.getX()>pos.x)
-				pos.x-=p1.rect.width;
-			else
-				pos.x+=p1.rect.width;
-		}*/
-		if(isleft)
+			if(p1.getX()>pos.x){
+				p1.hurt(10);
+				pos.x-=10;
+			}
+			else{
+				p1.hurt(10);
+				pos.x+=10;
+			}
+		}
+		if(isleft){
 			rect= new Rectangle(pos.x-width, pos.y, fixwidth, height);
-		else
+			innerrect.x=rect.x + fixwidth*0.25f;
+			innerrect.y=rect.y;
+		}
+		else{
 			rect= new Rectangle(pos.x, pos.y, fixwidth, height);
+			innerrect.x=rect.x + fixwidth*0.25f;
+			innerrect.y=rect.y;
+		}
 		if(!isfly)
 		{
 			vel.y+=acc.y*delta;
@@ -169,19 +165,19 @@ public class Enemy {
 		if(State==state.attack)
 		{
 			if(mp>100){
-				dialog=dialogs[bossoff[type]+currentspec];
+				dialog=EnemyConst.dialogs[EnemyConst.bossoff[type]+currentspec];
 				dialogtime = 2;
 				mp=0;
 				currentspec++;
 				specfired = true;
-				if(currentspec>specseq[type])
+				if(currentspec>EnemyConst.specseq[type])
 					currentspec=0;
 			}
 	    	//basic.timer+=delta;
 			timer+=delta;
 			width=tempwidth;
-			for(int i=0;i<hitTime[type].length;i++)
-			if(timer>hitTime[type][i])
+			for(int i=0;i<EnemyConst.hitTime[type].length;i++)
+			if(timer>EnemyConst.hitTime[type][i])
 			{
 				//System.out.println("shot"+i+":"+shot[i]);
 				if(!shot[i])//near(p1) && !shot )
@@ -210,9 +206,9 @@ public class Enemy {
 							mpb.update(mp);
 						}
 					}
-					if(i>=hitTime[type].length-1){
+					if(i>=EnemyConst.hitTime[type].length-1){
 							//System.out.println("delay");
-							attackdelay=attackdely[type];
+							attackdelay=EnemyConst.attackdely[type];
 					}
 					shot[i]=true;
 								//basic.hit(p1,pos.x,pos.y,!isleft,att);
@@ -341,7 +337,7 @@ public class Enemy {
 		width=60;
 		hurt=false;
 		isscored=false;
-		hp=health[type];
+		hp=EnemyConst.health[type];
 		spawnTime=0.60f;
 		timer=0;
 		State=state.idle;
@@ -454,12 +450,12 @@ public class Enemy {
 	}
 	public bullet mage() {
 		// TODO Auto-generated method stub
-		bullet e=new bullet((pos.x+width/2)+(isleft?-20:20), (pos.y+height/2),!isleft);
+		bullet e=new bullet((pos.x+width/2)+(isleft?-20:20), (pos.y+height/2),att * 2,!isleft);
 		return e;
 	}
 	
 	public barrage specbrg(){
-		return new barrage((float) (Assetloader.getrandom(600)+20), 10, 40, 40, 1);
+		return new barrage((float) (Assetloader.getrandom(600)+20), 10, 40, 40,att * 4, 1);
 	}
 	
 	public void OffScreen(){
@@ -470,7 +466,7 @@ public class Enemy {
 		return isOnScreen;
 	}
 	public int getBaseHealth() {
-		return health[type];
+		return EnemyConst.health[type];
 	}
 	
 }

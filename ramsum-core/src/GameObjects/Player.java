@@ -78,7 +78,7 @@ public float getheight()
 
 public bullet mage() {
 	// TODO Auto-generated method stub
-	bullet e=new bullet(centreX+(isleft?-20:20), centreY,isleft);
+	bullet e=new bullet(centreX+(isleft?-20:20), centreY, att * 2, isleft);
 	mp-=30;
 	isAttack=true;
 	width=96;

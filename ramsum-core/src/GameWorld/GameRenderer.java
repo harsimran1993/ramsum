@@ -393,6 +393,7 @@ public class GameRenderer {
 			//level data
 			Assetloader.font.setColor(Color.WHITE);
 			Assetloader.font.setScale(0.6f,-0.6f);
+			Assetloader.font.draw(batcher,"FPS:"+Gdx.graphics.getFramesPerSecond(),20,20);
 			Assetloader.font.draw(batcher,""+Myworld.potions, Myworld.s[4].x-Myworld.s[4].radius, Myworld.s[4].y-Myworld.s[4].radius);
 			batcher.end();
 			

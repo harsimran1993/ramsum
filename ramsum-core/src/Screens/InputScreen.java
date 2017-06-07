@@ -241,7 +241,7 @@ public class InputScreen implements Screen{
 				play="Loading...";
 				game.isstart=true;
 				dispose();
-				game.setScreen(new GameScreen(game,false,1,true));
+				game.setScreen(new GameScreen(game,false,1,true,false));
 			}
 			if(x30.contains(inputX,inputY))
 			{

@@ -1,7 +1,7 @@
 package level;
 
 public class Level {
-public int level=1,NOE=0,NOP=0,NOD=0,NOO=0;
+public int level=1,NOE=0,NOP=0,NOD=0,NOC=1,NODC[],CCS=0,NOO=0;
 public Enemy_data enemy[];
 public Platform_data plats[];
 public Dialog_data dialogs[];
@@ -17,38 +17,47 @@ public Level()
 {
 	
 }
+public void loadNextCS(){
+	if(CCS < NOC)
+		CCS+=1;
+}
 public void loadLevel(int lvl,int gameWidth,int gameHeight)
 {
 	switch(lvl)
 	{
 	case 1:
-		px=gameWidth/2-25;
-		py=214;
+		px = gameWidth/2-25;
+		py = 214;
 		//g=220+80;
 		//grassg=g+58;
-		g=220+160;
-		grassg=gameHeight-45;
-		intensity=0.5f;
-		NOE=0;
-		NOP=3;
-		NOD=3;
-		NOO=9;
-		back=2;
-		maxdist=1280;
+		g = 220 + 160;
+		grassg = gameHeight-45;
+		intensity = 0.5f;
+		NOE = 0;
+		NOP = 3;
+		NOD = 4;
+		NOC = 2;
+		NODC = new int[NOC];
+		NODC[0] = 3;
+		NODC[1] = 4;
+		NOO = 10;
+		back = 2;
+		maxdist = 1280;
 		mdadjust = -90;
 		grass = 3;
 		upwall = true;
 		upwallid = 0;
-		backscroll= 0.8f;
+		backscroll = 0.8f;
 		
-		enemy= new Enemy_data[NOE];
-		plats= new Platform_data[NOP];
-		dialogs=new Dialog_data[NOD];
-		objd= new object_data[NOO];
+		enemy = new Enemy_data[NOE];
+		plats = new Platform_data[NOP];
+		dialogs =new Dialog_data[NOD];
+		objd = new object_data[NOO];
 		
 		dialogs[0]=new Dialog_data("System", "booting up...");
 		dialogs[1]=new Dialog_data("System","All module up and running!!!");
 		dialogs[2]=new Dialog_data("Ramsum","Where am I, I was... Dead.");
+		dialogs[3]=new Dialog_data("System", "Picked up Tool-box!! might come in handy.");
 		plats[0]=new Platform_data(30, grassg-193, 100, 200,3,false,0);
 		plats[1]=new Platform_data(180, grassg-60, 140, 70,4,false,0);
 		plats[2]=new Platform_data(maxdist-90, 0, 170, 220,5,true,gameHeight-160);
@@ -61,6 +70,8 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		objd[6]=new object_data(8, 800, grassg-158, 100, 160,backscroll);
 		objd[7]=new object_data(9, 550, grassg-158, 100, 160,backscroll);
 		objd[8]=new object_data(10, 1040, grassg-158, 100, 160,backscroll);
+		objd[9]=new object_data(-1, 500, g, 65, 65,backscroll,true);//cutscene-trigger
+		//objd[10]=new object_data(-4, 750, g, 65, 65,backscroll,true);//level-trigger
 			break;
 			
 	case 2:
@@ -71,6 +82,9 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		NOE=12;
 		NOP=5;
 		NOD=4;
+		NOC = 1;
+		NODC = new int[NOC];
+		NODC[0] = 4;
 		NOO=0;
 		back=0;
 		maxdist=8096;
@@ -113,7 +127,10 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		grassg=gameHeight-45;
 		NOE=10;
 		NOP=6;
-		NOD=2;
+		NOD=3;
+		NOC = 1;
+		NODC = new int[NOC];
+		NODC[0] = 3;
 		NOO=0;
 		back=0;
 		maxdist=6000;
@@ -126,7 +143,7 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		
 		dialogs[0]=new Dialog_data("Sweeper-Bot", "Intruder Sighted!!!");
 		dialogs[1]=new Dialog_data("Sergeant Cluster", "WHO DARES DISTURB ME!!! DESTROY HIM!!!");
-		dialogs[1]=new Dialog_data("Sergeant Cluster", "FEEL MY WRATH AND DIE PEST!!!");
+		dialogs[2]=new Dialog_data("Sergeant Cluster", "FEEL MY WRATH AND DIE PEST!!!");
 		
 		plats[0]=new Platform_data(150, g-220, 220, 60,0,true,50);
 		plats[1]=new Platform_data(1500, g-160, 180, 60,0,true);
@@ -157,6 +174,9 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 		NOE=1;
 		NOP=20;
 		NOD=1;
+		NOC = 1;
+		NODC = new int[NOC];
+		NODC[0] = 1;
 		NOO=0;
 		back=0;
 		maxdist=4600;
@@ -206,13 +226,16 @@ public void loadLevel(int lvl,int gameWidth,int gameHeight)
 			break;
 			
 	default:
-		px=gameWidth/2-25;
-		py=214;
-		g=220+160;
-		grassg=gameHeight-45;
-		NOE=10;
-		NOP=5;
-		NOD=1;
+		px = gameWidth/2-25;
+		py = 214;
+		g = 220+160;
+		grassg = gameHeight-45;
+		NOE = 10;
+		NOP = 5;
+		NOD = 1;
+		NOC = 1;
+		NODC = new int[NOC];
+		NODC[0] = 1;
 		NOO=0;
 		back=0;
 		maxdist=6000;
@@ -305,6 +328,7 @@ public class Dialog_data{
 public class object_data{
 	public int x,y,w,h,type;
 	public float speedMUL;
+	public boolean isTrigger = false;
 	
 	public object_data(int type,int x,int y,int width, int height,float speedMUL){
 		this.x=x;
@@ -313,6 +337,16 @@ public class object_data{
 		this.h=height;
 		this.type=type;
 		this.speedMUL=speedMUL;
+	}
+
+	public object_data(int type,int x,int y,int width, int height,float speedMUL,boolean isTrigger){
+		this.x=x;
+		this.y=y;
+		this.w=width;
+		this.h=height;
+		this.type=type;
+		this.speedMUL=speedMUL;
+		this.isTrigger=isTrigger;
 	}
 	
 }

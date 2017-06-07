@@ -7,11 +7,13 @@ public class LoadScreen implements Screen{
 
 	private RamSumGame game;
 	private int level;
+	private boolean backlevel;
 	
-	public LoadScreen(int level,RamSumGame game)
+	public LoadScreen(int level,RamSumGame game,boolean backlevel)
 	{
 		this.level=level;
 		this.game=game;
+		this.backlevel=backlevel;
 	}
 	@Override
 	public void dispose() {
@@ -36,7 +38,7 @@ public class LoadScreen implements Screen{
 	public void render(float arg0) {
 		// TODO Auto-generated method stub
 		game.isstart=true;
-		game.setScreen(new GameScreen(game,false,level,false));
+		game.setScreen(new GameScreen(game,false,level,false,backlevel));
 	}
 
 	@Override

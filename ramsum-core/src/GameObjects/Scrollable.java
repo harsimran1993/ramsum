@@ -61,9 +61,17 @@ public class Scrollable {
     public float getX() {
         return position.x;
     }
+    
+    public void setX(float posX){
+    	this.position.x=posX;
+    }
 
     public float getY() {
         return position.y;
+    }
+    
+    public void setY(float posY){
+    	this.position.y=posY;
     }
 
     public int getWidth() {

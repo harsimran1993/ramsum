@@ -77,14 +77,19 @@ public float getheight()
 }
 
 public bullet mage() {
+	bullet e=new bullet(2000, centreY, att * 2, isleft);
+	if(!isAttack &&!(state==state.ko))
+	{
 	// TODO Auto-generated method stub
-	bullet e=new bullet(centreX+(isleft?-20:20), centreY, att * 2, isleft);
+		e.rect.x=centreX+(isleft?-20:20);
+	//bullet e=new bullet(centreX+(isleft?-20:20), centreY, att * 2, isleft);
 	mp-=30;
 	isAttack=true;
 	width=96;
 	if(basic.getId()!=5)
 		basic=mage;
 	basic.hit();
+	}
 	return e;
 }
 

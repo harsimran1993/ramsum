@@ -19,6 +19,7 @@ import attacks.barrage;
 //import appwarp.WarpController;
 import attacks.bullet;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
@@ -51,7 +52,7 @@ public class GameWorld {
 	int potions=40;
 	private float healtimer=-1,distance=300,maxdist;
 	//change levels
-	public int current_lvl=4,nxtlevel=1,currentDialog=0,ground=0,gameWidth,gameHeight;
+	public int current_lvl=3,nxtlevel=1,currentDialog=0,ground=0,gameWidth,gameHeight;
 	public boolean levelupdate=false,lvlbtn=false,cutScene=true;
 	//bullets
 	public ArrayList<bullet> mage,enemage;
@@ -63,7 +64,7 @@ public class GameWorld {
 	public ArrayList<SceneObj> objs;
 	//dialog
 	
-	public GameWorld( RamSumGame ramSumGame, int gameWidth,int gameHeight, Boolean multiplayer,int lvl,Boolean newgame) {
+	public GameWorld( RamSumGame ramSumGame, int gameWidth,int gameHeight,int lvl,Boolean newgame, Boolean backlevel) {
 		json = new Json();
 		this.game=ramSumGame;
 		this.current_lvl=lvl;
@@ -87,7 +88,7 @@ public class GameWorld {
 
 		objs = new ArrayList<SceneObj>();
 		for(int i=0;i<level.NOO;i++)
-			objs.add(new SceneObj(level.objd[i].type,level.objd[i].x,level.objd[i].y,level.objd[i].w,level.objd[i].h,level.objd[i].speedMUL));
+			objs.add(new SceneObj(level.objd[i].type,level.objd[i].x,level.objd[i].y,level.objd[i].w,level.objd[i].h,level.objd[i].speedMUL,level.objd[i].isTrigger));
 
 		xp=Assetloader.getXP();
 		if(newgame)
@@ -160,6 +161,9 @@ public class GameWorld {
 			p1.name="Ram Sum";
 		//sendData(0);
 		run=true;
+		if(backlevel){
+		moveto(maxdist - level.px * 2);
+		}
 		//game.update=datas.toString();
 		AI=new Runnable() {
 
@@ -483,8 +487,24 @@ public class GameWorld {
 			plat.setX(speed);
 		for(bullet b:mage)
 			b.rect.x += speed;
-		for(SceneObj obj : objs)
+		for(SceneObj obj : objs){
 			obj.getRect().x += speed * obj.getMUL();
+			if(obj.isTrigger){
+				if(obj.isCSTrigger()&& obj.getRect().overlaps(p1.rect)){
+					level.loadNextCS();
+					gamestate=GAMESTATE.CUTSCENE;
+					obj.isTrigger=false;
+					p1.stopx();
+				}
+				else if(obj.isLVLTrigger() && obj.getRect().overlaps(p1.rect)){
+					nxtlevel = -obj.getType();
+					lvlbtn=true;
+				}
+				else if(lvlbtn){
+					lvlbtn=false;
+				}
+			}
+		}
 		for(barrage brg : barrage)
 			brg.rect.x += speed;
 		start.x+=speed;
@@ -518,6 +538,21 @@ public class GameWorld {
 	public ScrollHandler getScroller() {
 		// TODO Auto-generated method stub
 		return scr;
+	}
+	
+	public void moveto(float maxdist2){
+		for(Enemy enemy : en)
+		enemy.getPos().x -= maxdist2;
+		for(Platforms plat : platforms)
+			plat.setX(-maxdist2);
+		for(bullet b:mage)
+			b.rect.x -= maxdist2;
+		for(SceneObj obj : objs){
+			obj.getRect().x -= maxdist2;
+		}
+		start.x-=maxdist2;
+		end.x-=maxdist2;
+		distance += maxdist2;
 	}
  /*   public void sendData(int move){
     	if(multi){
@@ -670,9 +705,9 @@ public class GameWorld {
 	}
 	
 	public boolean endCuteScene(){
-		if(currentDialog>=level.NOD - 1){
+		if(currentDialog>=level.NODC[level.CCS] - 1){
 			cutScene=false;
-			currentDialog=0;
+			//currentDialog=0;
 			return true;
 		}
 		return false;

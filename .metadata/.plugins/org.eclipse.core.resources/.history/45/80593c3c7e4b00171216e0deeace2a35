@@ -1,0 +1,12 @@
+package GameObjects;
+
+public class consumable extends item {
+
+	public int resHp=10,resMp=10;
+	public consumable(int id, String name,int hp,int mp) {
+		super(id, name);
+		// TODO Auto-generated constructor stub
+		this.resHp=hp;
+		this.resMp=mp;
+	}
+}

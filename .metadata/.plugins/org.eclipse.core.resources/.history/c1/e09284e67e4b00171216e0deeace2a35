@@ -1,0 +1,7 @@
+package GameObjects;
+
+public class Slot {
+	private Item item;
+
+    private int amount;
+}

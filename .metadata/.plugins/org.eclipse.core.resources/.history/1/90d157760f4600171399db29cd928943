@@ -1,0 +1,725 @@
+package GameWorld;
+
+import java.util.ArrayList;
+
+import javafx.geometry.HPos;
+import level.Level;
+
+import ui_objects.Bar;
+import ui_objects.movepad;
+
+import GameObjects.Enemy;
+import GameObjects.Player;
+import GameObjects.Platforms;
+import GameObjects.SceneObj;
+import GameObjects.ScrollHandler;
+import Helper.Assetloader;
+import Helper.SaveManager;
+import attacks.barrage;
+//import appwarp.WarpController;
+import attacks.bullet;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.mygdx.ramsumgame.RamSumGame;
+
+public class GameWorld {
+	static Player  p1;//,p2;
+	ScrollHandler scr;
+	public Circle c5,c6,s[],nxtlvl;
+	float timer=0 ,timer2=0,speed=0;
+	public ArrayList<Enemy> en;
+	public Rectangle start,end;
+	private enum GAMESTATE{NORMAL,WIN, PAUSE,CUTSCENE};
+	public GAMESTATE gamestate = GAMESTATE.CUTSCENE;
+	public int xp;
+	private Runnable AI;
+	//save
+	public static SaveManager svm=new SaveManager(false);
+	Json json;
+	RamSumGame game;
+	//flags
+	private boolean collides=false,run=false;
+	//movng pad
+	public movepad mpad;
+	Platforms platforms[];
+	//tiler
+	Level level;
+	//potion use
+	int potions=40;
+	private float healtimer=-1,distance=300,maxdist;
+	//change levels
+	public int current_lvl=3,nxtlevel=1,currentDialog=0,ground=0,gameWidth,gameHeight;
+	public boolean levelupdate=false,lvlbtn=false,cutScene=true;
+	//bullets
+	public ArrayList<bullet> mage,enemage;
+	public ArrayList<barrage> barrage;
+	Bar xpBar;
+	barrage brg;
+	
+	//doors
+	public ArrayList<SceneObj> objs;
+	//dialog
+	
+	public GameWorld( RamSumGame ramSumGame, int gameWidth,int gameHeight,int lvl,Boolean newgame, Boolean backlevel) {
+		json = new Json();
+		this.game=ramSumGame;
+		this.current_lvl=lvl;
+		this.nxtlevel=current_lvl+1;
+		// TODO Auto-generated constructor stub
+		this.level=new Level();
+		level.loadLevel(current_lvl,gameWidth,gameHeight);
+		
+		this.ground = level.g+65;
+		this.gameWidth = gameWidth;
+		this.gameHeight = gameHeight;
+		this.maxdist = level.maxdist;
+		this.distance = gameWidth/2-65;
+		
+		this.mage = new ArrayList<bullet>();
+		this.enemage = new ArrayList<bullet>();
+		this.barrage = new ArrayList<barrage>();
+		
+		start = new Rectangle(-gameWidth,0,gameWidth,480);
+		end = new Rectangle((int) (maxdist)+level.mdadjust,0,gameWidth,480);
+
+		objs = new ArrayList<SceneObj>();
+		for(int i=0;i<level.NOO;i++)
+			objs.add(new SceneObj(level.objd[i].type,level.objd[i].x,level.objd[i].y,level.objd[i].w,level.objd[i].h,level.objd[i].speedMUL,level.objd[i].isTrigger));
+
+		xp=Assetloader.getXP();
+		if(newgame)
+		{
+			p1=new Player(level.px, level.py, 65, 65, level.g,false,xp);//25x
+			//System.out.println("new player");
+		}
+		else
+		{
+			//p1=svm.loadDataValue("p1",Player.class);
+			p1.setX(level.px);
+			p1.setY(level.py);
+			p1.setFixGround(level.g);
+			p1.resetGround();
+		}
+		xpBar =new Bar(p1.nextlevelxp-p1.currentlevelxp, (int) (gameWidth * 0.5f)-26, 46, 50, 6);
+		//p2=new Player(380, 214, 80, 80, midPointY +54,true,0);
+		s = new Circle[5];
+		//multi=multiplayer;
+		
+		/*if(!multiplayer)
+		{*/
+			gamestate=GAMESTATE.CUTSCENE;
+			en = new ArrayList<Enemy>();
+			for(int i=0;i<level.NOE;i++){
+				en.add(new Enemy(level.enemy[i].type,level.enemy[i].x,level.enemy[i].y,level.enemy[i].w,level.enemy[i].h,level.enemy[i].g,level.enemy[i].fly,level.enemy[i].lvl,level.enemy[i].isboss));
+				if(!level.enemy[i].canWalk)
+					en.get(i).disableWalk();
+			}
+		/*}
+		else if(multiplayer)
+		{
+			gamestate=GAMESTATE.MULTIPLAYER;
+			en = new ArrayList<Enemy>();
+			en.add(new Enemy(0, 300,  131, 152, 160, 131, false, 24,true));
+		}*/
+			System.out.println(level.backscroll);
+		scr=new ScrollHandler(level.grassg,level.back,level.water,gameWidth,gameHeight,level.backscroll);
+		platforms=new Platforms[level.NOP];
+		for(int j=0;j<level.NOP;j++)
+		{
+			platforms[j]=new Platforms(level.plats[j].x, level.plats[j].y, level.plats[j].w, level.plats[j].h,level.plats[j].dync,level.plats[j].type,level.plats[j].maxdist);
+		}
+		
+		//gamecontroller objects
+	/*	c1=new Circle(30, 260, 20);
+		c2=new Circle(90, 260, 20);
+		c3=new Circle(60, 230, 20);
+		c4=new Circle(60, 290, 20);*/
+		//attack
+		c5=new Circle(gameWidth-90, gameHeight-80, 30);//400,260
+		//shut-down
+		c6=new Circle(gameWidth-75,40,20);
+		//next-level-button
+		nxtlvl=new Circle(gameWidth-75, 90, 20);
+		//slide-attack
+		s[0]=new Circle(gameWidth-110,gameHeight-145,18);//440,220
+		//air-punch
+		s[1]=new Circle(gameWidth-150,gameHeight-120,18);
+		//hurricane
+		s[2]=new Circle(gameWidth-160,gameHeight-70,18);
+		//mage-gun
+		s[3]=new Circle(gameWidth-140,gameHeight-30,18);
+		//potion
+		s[4]=new Circle(gameWidth-60,gameHeight-145,18);
+		//movement
+		mpad=new movepad();
+		//p1.name=username;
+		//if(!multi)
+			p1.name="Ram Sum";
+		//sendData(0);
+		run=true;
+		moveto(maxdist);
+		//game.update=datas.toString();
+		AI=new Runnable() {
+
+			@Override
+			public void run() {
+				System.out.println("started ai thread");
+				// TODO Auto-generated method stub
+				while(run)
+				{
+					/*for(int i=0;i<en.size();i++)
+					{
+						if(!en.get(i).isAlive)
+							{
+								en.remove(i);
+								i--;
+							}
+					}*/
+
+					synchronized (en) {
+					if(isCUTSCENE()){
+					/*	for(Enemy enemy:en){
+							enemy.setIdle();
+							enemy.disableWalk();
+						}*/
+					}
+					else
+					for(Enemy enemy:en)
+					{
+						/*if(!enemy.canWalk()){
+							enemy.enableWalk();
+						}*/
+						if(enemy.isOnScreen()){
+							if(enemy.near(p1) && !enemy.isAttacking() && !enemy.ishurt() && enemy.attackrelay())
+							{
+								//System.out.println("near attacks");
+								if(enemy.isIdle())
+									enemy.attack(p1);
+							}
+							else if(enemy.isAlert(p1) )
+							{
+								if(!enemy.isAttacking() && !enemy.near(p1)  )
+									enemy.move(p1.centreX,p1.getY());
+								//System.out.println("moving");
+							}
+						/*	else if(!enemy.isIdle())
+							{
+								enemy.setIdle();
+								//System.out.println("idle");
+							}*/
+						}
+					}
+				}
+					try {
+						Thread.sleep(400);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				System.out.println("thread done");
+			}};
+			new Thread(AI).start();
+	}
+
+	public void update(float delta)
+	{
+		//System.out.println(distance);
+		healtimer-=delta;
+		/*barragedemo -= delta;
+		if(barragedemo < 0){
+			DropBarrage(new barrage(p1.getX(), 10, 40, 40, 1));
+			barragedemo = 0.5f;
+		}*/
+		for(int i=0;i<mage.size();i++)
+		{
+			mage.get(i).update(delta);
+			if(mage.get(i).rect.x>(gameWidth * 1.5f) || mage.get(i).rect.x<-(gameWidth * 0.5f))
+				{
+					mage.remove(i);
+					System.out.println("bullet removed out of stage");
+					i--;
+				}
+			else{
+			for(Enemy enemy:en)
+			if(enemy.isAlive && mage.get(i).collision(enemy.rect))
+			{
+				enemy.hurt(mage.get(i).getDMG(),(enemy.getX()-mage.get(i).rect.x)>0?20:-20);
+				mage.remove(i);
+				i--;
+				System.out.println("bullet removed after hit");
+				break;
+			}
+			}
+		}for(int i=0;i<enemage.size();i++)
+		{
+			enemage.get(i).update(delta);
+			if(enemage.get(i).rect.x>(gameWidth * 1.5f) || enemage.get(i).rect.x< - (gameWidth * 0.5f))
+				{
+					enemage.remove(i);
+					i--;
+					System.out.println("bullet removed out of stage");
+				}
+			else{
+				if(p1.isAlive && enemage.get(i).collision(p1.bulletrect))
+				{
+					p1.hurt(enemage.get(i).getDMG(),(p1.getX()-enemage.get(i).rect.x)>0);
+					enemage.remove(i);
+					i--;
+					System.out.println("bullet removed after hit");
+				}
+			}
+		}
+		for(int i=0;i<barrage.size();i++){
+			brg = barrage.get(i);
+			brg.update(delta);
+			if(brg.isobsolette()){
+				barrage.remove(i);
+				i--;
+				System.out.println("barrage blasted away!!");
+			}
+			else if(p1.isAlive && brg.collision(p1.bulletrect))
+				{
+					p1.hurt(brg.getDMG());
+					brg.blast();
+				}
+			else if(brg.rect.y>ground-brg.rect.height){
+				brg.blast();
+			}
+		}
+		switch(gamestate)
+		{
+		/*case MULTIPLAYER: 
+				updateM(delta);
+				break;*/
+		case WIN:
+				break;
+		case NORMAL: 
+				updateN(delta);
+		case CUTSCENE:
+				updateCS(delta);
+		case PAUSE:
+				break;
+		default:
+				break;
+		}
+	}
+	private void updateCS(float delta) {
+		// TODO Auto-generated method stub
+		timer+=delta;
+		p1.update(delta);
+	/*	for(int i=0;i<en.size();i++){
+			if(en.get(i).isAlive ){
+				if( en.get(i).onScreen(gameWidth))
+					en.get(i).update(delta,p1,this);
+					//en.get(i).collides(p1);
+				else{
+					en.get(i).OffScreen();
+				}
+						
+			}
+		}*/
+		for(Platforms plat:platforms)
+		{
+			if(plat.onScreen(gameWidth))
+			plat.update(delta);
+			if(p1.centreX>plat.getX() && p1.centreX<(plat.getX()+plat.getwidth())) 
+			{
+				if(plat.getType()==1)
+					p1.setGround(plat.getground(p1));	
+				else if((p1.getY()+p1.getheight())<plat.boardingHeight())
+					p1.setGround(plat.getground(p1));
+				collides=true;
+			}
+			
+		}
+
+		if(level.water)
+			scr.updatewater(delta);
+		//System.out.println(level.NOD);
+	}
+
+	/*public void updateM(float delta)
+	{
+		timer += delta;
+		timer2 += delta;
+		if(timer>0.05)
+		{
+			updatePlayer();
+			timer=0;
+		}
+		if(timer2>0.2f)
+		{
+			sendData(0);
+			timer2=0;
+		}
+		p1.update(delta);
+		p2.update(delta);
+		if(!p2.isAlive || !p1.isAlive)
+			gamestate=GAMESTATE.WIN;
+	}*/
+	public void updateN(float delta) {
+		// TODO Auto-generated method stub
+		timer+=delta;
+		p1.update(delta);
+		//p1.hurt(10);
+		if(p1.getY()>level.hurtg)
+			p1.hurt(10);
+		synchronized (en) {
+		for(int i=0;i<en.size();i++){
+			if(en.get(i).isAlive ){
+				if( en.get(i).onScreen(gameWidth))
+					en.get(i).update(delta,p1,this);
+					//en.get(i).collides(p1);
+				else{
+					en.get(i).OffScreen();
+				}
+						
+			}
+			else//short circuit remove if(false) for respawn to work shorted this during level design
+			{
+			
+				if(!en.get(i).isscored)
+				{
+					en.get(i).isscored=true;
+					xp+=en.get(i).getBaseHealth()/50;
+					if(xp > p1.nextlevelxp){
+						p1.updateLevel(xp);
+						xpBar = new Bar(p1.nextlevelxp-p1.currentlevelxp, (int) (gameWidth * 0.5f)-31, 46, 60, 6);
+					}
+					Assetloader.setXP(xp);
+				}
+				//if(false){
+				en.get(i).spawnTime-=delta;
+				if(en.get(i).spawnTime<0)
+				{
+				//enemy.reset(rand.nextInt(500)+150,rand.nextInt(240));
+					en.remove(i);
+					i--;
+				}
+			//}
+			}
+		}
+		}
+		collides=false;
+		for(Platforms plat:platforms)
+		{
+			if(plat.onScreen(gameWidth))
+			plat.update(delta);
+			if(p1.centreX>plat.getX() && p1.centreX<(plat.getX()+plat.getwidth())) 
+			{
+				if(plat.getType()==1)
+					p1.setGround(plat.getground(p1));	
+				else if((p1.getY()+p1.getheight())<plat.boardingHeight()){
+					p1.setGround(plat.getground(p1));
+				}
+				collides=true;
+			}
+			
+		}
+		if(!collides)
+			p1.resetGround();
+		
+		if(level.water)
+			scr.updatewater(delta);
+		lvlbtn=false;
+		if(distance>maxdist-100)
+		{
+			nxtlevel=current_lvl+1;
+			lvlbtn=true;
+		}
+		if(distance<100)
+		{
+			nxtlevel=current_lvl>1?current_lvl-1:1;
+			lvlbtn=true;
+		}
+	/*	if(p1.moveright && distance<maxdist && ((p1.state==state.walk) && !p1.isleft))//p1.getX()>width-p1.getwidth()-10  && p1.state!=state.idle)
+		{
+			if(scr.SCROLL_SPEED>=0)
+				scr.direct(scr.SPEED_LEFT);
+				scr.update(delta);
+			speed=scr.SCROLL_SPEED*delta;
+			for(Enemy enemy:en)
+			enemy.getPos().x+=speed;
+			for(Platforms plat:platforms)
+				plat.setX(speed);
+			for(bullet b:mage)
+				b.rect.x+=speed;
+			for(SceneObj obj:objs)
+				obj.getRect().x+=speed;
+			distance-=(speed);
+		}
+		if(p1.moveleft && distance>0 &&((p1.state==state.walk) && p1.isleft))//p1.getX()<-p1.getwidth()+20 && p1.state!=state.idle)
+		{
+			if(scr.SCROLL_SPEED<0)
+				scr.direct(scr.SPEED_RIGHT);
+				scr.update(delta);
+			speed=scr.SCROLL_SPEED*delta;
+			for(Enemy enemy:en)
+			enemy.getPos().x+=speed;
+			for(Platforms plat:platforms)
+				plat.setX(speed);
+			for(bullet b:mage)
+				b.rect.x+=speed;
+			for(SceneObj obj:objs)
+				obj.getRect().x+=speed;
+			distance-=(speed);
+		}
+		if(p1.ishurt())
+		{
+			//System.out.println(p1.getVelX());*/
+		/*if((!p1.moveleft && p1.getVelX()>0) ||(!p1.moveright && p1.getVelX()<0))
+			p1.setVelx(0);*/
+		if(!p1.ishurt() && (distance<maxdist || p1.isleft) && (distance>0 || !p1.isleft))
+		{
+		scr.direct( - p1.getVelX());
+		scr.update(delta);
+		speed = - p1.getVelX() * delta;
+		for(Enemy enemy : en)
+		enemy.getPos().x += speed;
+		for(Platforms plat : platforms)
+			plat.setX(speed);
+		for(bullet b:mage)
+			b.rect.x += speed;
+		for(SceneObj obj : objs){
+			obj.getRect().x += speed * obj.getMUL();
+			if(obj.isTrigger){
+				if(obj.isCSTrigger()&& obj.getRect().overlaps(p1.rect)){
+					level.loadNextCS();
+					gamestate=GAMESTATE.CUTSCENE;
+					obj.isTrigger=false;
+					p1.stopx();
+				}
+				else if(obj.isLVLTrigger() && obj.getRect().overlaps(p1.rect)){
+					nxtlevel = -obj.getType();
+					lvlbtn=true;
+				}
+				else if(lvlbtn){
+					lvlbtn=false;
+				}
+			}
+		}
+		for(barrage brg : barrage)
+			brg.rect.x += speed;
+		start.x+=speed;
+		end.x+=speed;
+		distance -= speed;
+		}
+		/*}*/
+	/*	scr.direct((int) -p1.getVelX());
+		scr.updateRight(delta);
+		for(Enemy enemy:en)
+			enemy.getPos().x-=p1.getVelX()*delta;
+		for(Platforms plat:platforms)
+			plat.setX(-p1.getVelX()*delta);*/
+		
+		
+		if(!p1.isAlive)
+		{
+			gamestate=GAMESTATE.WIN;
+			run=false;
+		}
+	}
+	public Player getPlayer() {
+		// TODO Auto-generated method stub
+		return p1;
+	}
+	/*public Player getopponent() {
+		// TODO Auto-generated method stub
+		return p2;
+	}*/
+
+	public ScrollHandler getScroller() {
+		// TODO Auto-generated method stub
+		return scr;
+	}
+	
+	public void moveto(float maxdist2){
+		for(Enemy enemy : en)
+		enemy.getPos().x += maxdist2;
+		for(Platforms plat : platforms)
+			plat.setX(plat.getX()+maxdist2);
+		for(bullet b:mage)
+			b.rect.x += maxdist2;
+		for(SceneObj obj : objs){
+			obj.getRect().x += maxdist2;
+		}
+	}
+ /*   public void sendData(int move){
+    	if(multi){
+        try {  
+        	datas = new JSONObject(); 
+          String player=json.toJson(p1);
+          datas.put("p1",player);
+          datas.put("move", move);
+          datas.put("user", game.asr.username());
+          //game.update=datas.toString();
+         // game.full=true;
+         // datas.put("user", "anonm");
+          //warpc.sendGameUpdate(datas.toString());  
+        // warpc.sendChat(datas.toString());
+          game.asr.sendmessage(datas.toString());
+          } catch (Exception e) {  
+        	  e.printStackTrace();
+          }  
+    	}
+     }  */
+/*	public void updatePlayer()
+	{	
+	try
+	{	datar = new JSONObject(game.update);
+			if(game.full)
+			{
+				p2=json.fromJson(Player.class, datar.getString("p1"));
+				p2.setX(480-p2.getX());
+				p2.isleft=!p2.isleft;
+				p2.setVelx(-p2.getVelX());
+				game.full=false;
+			}
+
+			
+			if(datar.getInt("move")==4)
+			{
+				p2.isAttack=false;
+				p2.attack(p1);
+			}
+
+	}
+	catch(Exception e){
+			e.printStackTrace();
+		}
+
+	}*/
+	public void save()
+	{
+		run=false;
+		if(gamestate==GAMESTATE.NORMAL)
+			svm.saveDataValue("enemy", en);
+		if(!Double.isNaN(p1.getX()))
+			svm.saveDataValue("p1", p1);
+	}
+	
+	public void load()
+	{
+		if(!svm.isEmpty())
+		{
+			if(gamestate==GAMESTATE.NORMAL)
+				{
+				Array am= new Array();
+					am=svm.loadDataValue("enemy",Array.class);
+					en.removeAll(en);
+					for(Object enem:am)
+						en.add((Enemy) enem);
+				}
+			p1=svm.loadDataValue("p1",Player.class);
+			run=true;
+			new Thread(AI).start();
+		}
+	}
+	public boolean isWin()
+	{
+		return gamestate==GAMESTATE.WIN;
+	}
+
+	public void reset() {
+		// TODO Auto-generated method stub
+		/*if(multi)
+		{
+			gamestate=GAMESTATE.MULTIPLAYER;
+			p2.reset(600, 600);
+			p1.reset(25,214);
+			run=true;
+			new Thread(AI).start();
+		}
+		else
+		{*/
+		levelupdate=true;
+		nxtlevel=current_lvl;
+		p1.reset(25,214);
+		disconnect();
+		//}
+	}
+
+	public void pause()
+	{
+		gamestate=GAMESTATE.PAUSE;
+		save();
+	}
+	public void resume()
+	{
+		load();
+		/*if(multi)
+			gamestate=GAMESTATE.MULTIPLAYER;
+		else*/
+		if(cutScene)
+			gamestate=GAMESTATE.CUTSCENE;
+		else
+			gamestate=GAMESTATE.NORMAL;
+	}
+	public void healplayer()
+	{
+		if(potions>0 && healtimer<0)
+		{
+		p1.hp = (float) ((p1.hp+0.5*p1.getHP())>p1.getHP() ? (p1.getHP()) : (p1.hp+0.5*p1.getHP()));
+		p1.mp = (float) ((p1.mp+0.5*p1.getMP())>p1.getMP() ? (p1.getMP()) : (p1.mp+0.5*p1.getMP()));
+		potions--;
+		healtimer=10;
+		}
+	}
+	/*public boolean ismuLt() {
+		// TODO Auto-generated method stub
+		return gamestate==GAMESTATE.MULTIPLAYER;
+	}*/
+	public boolean isNORM() {
+		// TODO Auto-generated method stub
+		return gamestate==GAMESTATE.NORMAL;
+	}
+	public void setNORM(){
+		gamestate=GAMESTATE.NORMAL;
+	}
+	public boolean isCUTSCENE() {
+		// TODO Auto-generated method stub
+		return gamestate==GAMESTATE.CUTSCENE;
+	}
+	public void disconnect()
+	{
+		//svm.saveDataValue("p1", p1);
+		/*if(ismuLt())
+			game.disconnect();
+		else*/
+			game.isstart=false;
+	}
+
+	public int getlevel() {
+		// TODO Auto-generated method stub
+		return current_lvl;
+	}
+	
+	public boolean endCuteScene(){
+		if(currentDialog>=level.NODC[level.CCS] - 1){
+			cutScene=false;
+			//currentDialog=0;
+			return true;
+		}
+		return false;
+	}
+
+	public void dispose() {
+		// TODO Auto-generated method stub
+		en.clear();
+	}
+	public void enmage(bullet b)
+	{
+		//System.out.println("added");
+		enemage.add(b);
+	}
+
+	public void DropBarrage(barrage brg){
+		System.out.println(brg.rect.x);
+		barrage.add(brg);
+	}
+}

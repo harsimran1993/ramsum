@@ -1,0 +1,11 @@
+package GameObjects;
+
+public class item {
+	private int id;
+	private String name;
+	
+	public item(int id,String name){
+		this.id=id;
+		this.name=name;
+	}
+}

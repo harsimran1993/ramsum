@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;ramsum-android/assets/font/font_0.png&apos; to &apos;font.png&apos;" description="Rename resource &apos;font_0.png&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="assets/font/font_0.png" name="font.png" stamp="1495638857561" updateReferences="true"/>
+</session>

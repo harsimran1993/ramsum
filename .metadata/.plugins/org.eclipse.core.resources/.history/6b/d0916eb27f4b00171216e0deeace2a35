@@ -1,0 +1,10 @@
+package GameObjects;
+
+import java.util.ArrayList;
+
+public class Inventory {
+
+	private Array<Slot> slots;
+	
+	
+}

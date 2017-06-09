@@ -1,0 +1,41 @@
+package GameObjects;
+
+public class Slot {
+	
+	private Item item;
+
+    private int amount;
+    public Slot(Item item, int amount) {
+        this.item = item;
+        this.amount = amount;
+    }
+
+    public boolean isEmpty() {
+        return item == null || amount <= 0;
+    }
+
+    public boolean add(Item item, int amount) {
+        if (this.item == item || this.item == null) {
+            this.item = item;
+            this.amount += amount;
+            notifyListeners();
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean take(int amount) {
+        if (this.amount >= amount) {
+            this.amount -= amount;
+            if (this.amount == 0) {
+                item = null;
+            }
+            notifyListeners();
+            return true;
+        }
+
+        return false;
+    }
+    private Array<SlotListener> slotListeners = new Array<SlotListener>();
+}

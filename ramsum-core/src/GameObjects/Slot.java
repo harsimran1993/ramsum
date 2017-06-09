@@ -1,5 +1,9 @@
 package GameObjects;
 
+import Helper.Assetloader;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
 public class Slot {
@@ -7,9 +11,12 @@ public class Slot {
 	private Item item;
 
     private int amount;
+    
+    private String str="0";
     public Slot(Item item, int amount) {
         this.item = item;
         this.amount = amount;
+        this.str = ""+amount;
     }
 
     public boolean isEmpty() {
@@ -20,6 +27,7 @@ public class Slot {
         if (this.item == item || this.item == null) {
             this.item = item;
             this.amount += amount;
+            this.str = ""+amount;
             notifyListeners();
             return true;
         }
@@ -30,6 +38,7 @@ public class Slot {
     public boolean take(int amount) {
         if (this.amount >= amount) {
             this.amount -= amount;
+            this.str = ""+amount;
             if (this.amount == 0) {
                 item = null;
             }
@@ -65,5 +74,13 @@ public class Slot {
     @Override
     public String toString() {
         return "Slot[" + item + ":" + amount + "]";
+    }
+    
+    public void render(SpriteBatch batcher,float x,float y){
+    	
+    	if(item != null){
+    		batcher.draw(Assetloader.ui[0],x+10,y+5,60,60);
+        	Assetloader.font.draw(batcher,str , x + 10, y + 10);
+    	}
     }
 }

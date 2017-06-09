@@ -52,8 +52,8 @@ public class Platforms{
 	public void render(SpriteBatch batcher,float runTime)
 	{
 		if(type==0 && vely<0){
-			batcher.draw(Assetloader.specialeffA[1].getKeyFrame(runTime),rect.x,rect.y+15,30,30,50,50,1f, 1f,200.0f);
-		batcher.draw(Assetloader.specialeffA[1].getKeyFrame(runTime),rect.x+rect.width-60,rect.y+15,30,30,50,50,1f, 1f,200.0f);
+			batcher.draw(Assetloader.specialeffA[1].getKeyFrame(runTime),rect.x+7,rect.y+25,30,30,50,50,1f, 1f,300.0f);
+			batcher.draw(Assetloader.specialeffA[1].getKeyFrame(runTime),rect.x+rect.width-52,rect.y+25,30,30,50,50,1f, 1f,300.0f);
 		}
 		if(type == 4)
 			batcher.setColor(Color.OLIVE);

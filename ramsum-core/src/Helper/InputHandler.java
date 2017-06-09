@@ -152,7 +152,13 @@ public class InputHandler implements InputProcessor {
 		}
 		if(myWorld.c6.contains(inputX,inputY))
 		{
-			myWorld.disconnect();
+			//myWorld.disconnect();
+			if(myWorld.isPause()){
+				myWorld.setNORM();
+			}
+			else{
+			myWorld.setPause();
+			}
 		}
 		if(myWorld.c5.contains(inputX,inputY))
 		{

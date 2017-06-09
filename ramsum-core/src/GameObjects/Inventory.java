@@ -2,6 +2,7 @@ package GameObjects;
 
 import Helper.Assetloader;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
@@ -18,11 +19,11 @@ public class Inventory {
 
         // create some random items
         for (Slot slot : slots) {
-            slot.add(new Item(1, "item"), 1);
+            slot.add(new Item(1, "item"), 9);
         }
 
         // create a few random empty slots
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 8; i++) {
             Slot randomSlot = slots.get(MathUtils.random(0, slots.size - 1));
             randomSlot.take(randomSlot.getAmount());
         }
@@ -74,12 +75,19 @@ public class Inventory {
 	
     public void render(SpriteBatch batcher,int gameWidth,int GameHeight){
     	
-    	batcher.draw(Assetloader.ui[0],gameWidth * 0.1f,GameHeight * 0.1f,gameWidth * 0.8f,GameHeight * 0.8f);
+    	batcher.draw(Assetloader.ui[11],gameWidth * 0.1f,GameHeight * 0.15f,gameWidth * 0.8f,GameHeight * 0.8f);
     	
 
-        for (Slot slot : slots) {
-            slot.add(new Item(1, "item"), 1);
+        for (int i=0;i<3;i++) {
+        	for(int j=0;j<6;j++){
+        	//batcher.setColor(Color.GREEN);
+        	batcher.draw(Assetloader.ui[10],gameWidth * 0.15f + 90 * j,GameHeight * 0.3f + 80 * i,80,70);
+        	
+        	slots.get(i*6+j).render(batcher, gameWidth * 0.15f + 90 * j, GameHeight * 0.3f + 80 * i);
+        	}
         }
+
+    	batcher.setColor(Color.WHITE);
     }
 	
 }

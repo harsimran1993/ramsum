@@ -1,0 +1,85 @@
+package GameObjects;
+
+import com.badlogic.gdx.math.Vector2;
+
+public class Scrollable {
+	// Protected is similar to private, but allows inheritance by subclasses.
+    protected Vector2 position;
+    protected Vector2 velocity;
+    protected int width,gamewidth;
+    protected int height;
+    protected boolean isScrolledLeft, isScrolledright;
+
+    public Scrollable(float x, float y, int width, int height, float scrollSpeed,int gamewidth) {
+        position = new Vector2(x, y);
+        velocity = new Vector2(scrollSpeed, 0);
+        this.width = width;
+        this.height = height;
+        this.gamewidth=gamewidth;
+        isScrolledLeft = false;
+        isScrolledright = false;
+    }
+
+    public void update(float delta) {
+        position.add(velocity.cpy().scl(delta));
+
+        // If the Scrollable object is no longer visible:
+        if (position.x < -width ) {
+            isScrolledLeft = true;
+        }
+        if(position.x>gamewidth)
+        	isScrolledright=true;
+    }
+
+    // Reset: Should Override in subclass for more specific behavior.
+    public void reset(float newX) {
+        position.x = newX;
+        isScrolledLeft = false;
+        isScrolledright=false;
+    }
+
+    // Getters for instance variables
+    public boolean isScrolledLeft() {
+        return isScrolledLeft;
+    }
+    public boolean isScrolledright() {
+        return isScrolledright;
+    }
+    public void stop() {
+        velocity.x = 0;
+    	}
+
+    public float getTailLX() {
+        return position.x + width;
+    }
+    
+    public float getHeadX()
+    {
+    	return position.x - width;
+    }
+
+    public float getX() {
+        return position.x;
+    }
+    
+    public float setX(int posX){
+    	this.pos.x=posX;
+    }
+
+    public float getY() {
+        return position.y;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+    public void setSpeed(float f)
+    {
+    	velocity.x=f;
+    }
+
+}
